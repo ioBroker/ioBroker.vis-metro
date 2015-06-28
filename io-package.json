@@ -1,0 +1,35 @@
+{
+    "common": {
+        "name":                     "vis-metro",
+        "version": "0.0.1",
+        "title":                    "ioBroker Visualisation - metro style Widgets",
+        "desc": {
+            "en":                   "metro Widgets for ioBroker.vis",
+            "de":                   "metro Widgets für ioBroker.vis",
+            "ru":                   "metro Widgets для ioBroker.vis"
+        },
+        "platform":                 "Javascript/Node.js",
+        "loglevel":                 "info",
+        "icon":                     "metro.png",
+        "enabled":                  true,
+        "mode":                     "once",
+        "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.vis-metro/master/admin/metro.png",
+        "keywords":                 ["metro", "vis", "GUI", "graphical", "scada"],
+        "readme":                   "https://github.com/ioBroker/ioBroker.vis-metro/blob/master/README.md",
+        "authors": [
+            "hobbyquaker <hq@ccu.io>"
+        ],
+        "localLink":                "%web_protocol%://%ip%:%web_port%/vis/edit.html",
+        "license":                  "MIT",
+        "dependencies":             ["vis"],
+        "onlyWWW":                  true,
+        "singleton":                true,
+        "type":                     "vis",
+		"restartAdapters":          ["vis"]
+    },
+    "native": {
+        "dependencies":          ["jqui-mfd"]
+    },
+    "instanceObjects": [
+    ]
+}
