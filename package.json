@@ -17,7 +17,7 @@
   },
   "licenses": [
     {
-      "type": "CC BY-NC",
+      "type": "MIT",
       "url": "https://github.com/ioBroker/ioBroker.vis-metro/blob/master/LICENSE"
     }
   ],
