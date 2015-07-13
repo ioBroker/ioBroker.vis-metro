@@ -1493,7 +1493,7 @@
         type="text/ejs"
         class="vis-tpl"
         data-vis-prev='<div id="prev_tplMetroTileStringDialogNumber" style="position: relative; text-align: initial;padding: 4px "><div class="vis-widget_prev ui-draggable-handle " style="width: 120px; height: 120px; padding: 3px;"> <div style="width:100%; height:100%" class="metro vis-widget-prev-body "> <div style="width:100%; height:100%;"class="tile hover bg-indigo"> <div class="tile-content icon"> <i class="icon-film"></i> </div> <div class="brand ribbed-steel"> <span class="label fg-white">Dialog Object</span> <div class="badge bg-cyan">1</div> </div> </div> <div style="padding: 42px 10px 10px;"> <div class="caption"></div> <div class="content"></div></div> </div>  </div></div>'
-        data-vis-attrs="content_oid;dialog_oid/id;number_oid/id;hide_on_0/checkbox;hover[true]/checkbox;transform[true]/checkbox;bg_class[bg-indigo]/style,metro-,bg- ribbed-;"
+        data-vis-attrs="content_oid/id;dialog_oid/id;number_oid/id;hide_on_0/checkbox;hover[true]/checkbox;transform[true]/checkbox;bg_class[bg-indigo]/style,metro-,bg- ribbed-;"
         data-vis-attrs0="group.icon;icon_src/image;icon_width/slider,0,100,1;icon_height/slider,0,100,1;icon_top/slider,0,100,1;icon_left/slider,0,100,1;icon_class[icon-database]/style,iconFont,icon-,,Icon ;"
         data-vis-attrs1="group.badge;label;badge_bg_class[]/style,metro-,bg-;brand_bg_class[ribbed-steel]/style,metro-,bg- ribbed-;"
         data-vis-attrs2="group.dialog;dialog_fontSize[12px];dialog_padding[0px 0px 0px 0px];dialog_textAlign;dialog_width;dialog_height;dialog_title;dialog_flat/checkbox;dialog_shadow/checkbox;dialog_draggable[true]/checkbox;dialog_modal/checkbox;dialog_icon_src/image;dialog_icon_class[]/style,iconFont,icon-,,Icon ;"
@@ -1501,27 +1501,24 @@
         data-vis-type="val,dialog"
         data-vis-name="Tile Dialog / Badge Number">
     <div id="<%= this.data.attr('wid') %>" class="vis-widget" style="width:136px; height:136px; padding: 3px;">
-    <div style="width:100%; height:100%" class="metro vis-widget-body <%== this.data.attr('class') %>" >
+        <div style="width:100%; height:100%" class="metro vis-widget-body <%== this.data.attr('class') %>" >
+            <div style="width:100%; height:100%;" id="metroTile_<%= this.data.attr('wid') %>" class="tile <%= this.data.attr('hover') ? 'hover ' : '' %><%= this.data.attr('bg_class') %>" >
+                <div class="tile-content icon <%= this.data.attr("icon_class") ? '' : 'icon-custom' %>">
+                    <%== this.data.attr("icon_src") ? '<img style="position: absolute;' + (this.data.attr('icon_top') ? ('top:' + this.data.attr('icon_top') + '%;') : '') + (this.data.attr('icon_left') ? ('left:' + this.data.attr('icon_left') + '%;') : '') + (this.data.attr('icon_width') ? ('width:' + this.data.attr('icon_width') + '%;') : '') + (this.data.attr('icon_height') ? ('height:' + this.data.attr('icon_height') + '%;') : '') + '" src="' + this.data.attr("icon_src") + '"/>' : '' %>
+                    <i class="<%= this.data.attr("icon_class") %>"></i>
+                    <%== this.data.attr('content_oid') ? vis.states.attr(this.data.content_oid + '.val') : '' %>
+                </div>
+                <div class="brand <%= this.data.attr("brand_bg_class") %>">
+                    <span class="label fg-white"><%= this.data.attr("label") %></span>
+                <div style="<%= vis.states.attr(this.data.number_oid + '.val') > 0 ? '' : 'display:none;' %>" class="badge <%= this.data.attr("badge_bg_class") %>"><%= vis.states.attr(this.data.number_oid + '.val') %></div>
+            </div>
+        </div>
 
-        <div style="width:100%; height:100%;" id="metroTile_<%= this.data.attr('wid') %>" class="tile <%= this.data.attr('hover') ? 'hover ' : '' %><%= this.data.attr('bg_class') %>" >
-        <div class="tile-content icon <%= this.data.attr("icon_class") ? '' : 'icon-custom' %>">
-        <%== this.data.attr("icon_src") ? '<img style="position: absolute;' + (this.data.attr('icon_top') ? ('top:' + this.data.attr('icon_top') + '%;') : '') + (this.data.attr('icon_left') ? ('left:' + this.data.attr('icon_left') + '%;') : '') + (this.data.attr('icon_width') ? ('width:' + this.data.attr('icon_width') + '%;') : '') + (this.data.attr('icon_height') ? ('height:' + this.data.attr('icon_height') + '%;') : '') + '" src="' + this.data.attr("icon_src") + '"/>' : '' %>
-        <i class="<%= this.data.attr("icon_class") %>"></i>
-        <%== this.data.attr('content_oid') ? vis.states.attr(this.data.content_oid + '.val') : '' %>
-   </div>
-    <div class="brand <%= this.data.attr("brand_bg_class") %>">
-    <span class="label fg-white"><%= this.data.attr("label") %></span>
-
-    <div style="<%= vis.states.attr(this.data.number_oid + '.val') > 0 ? '' : 'display:none;' %>" class="badge <%= this.data.attr("badge_bg_class") %>"><%= vis.states.attr(this.data.number_oid + '.val') %></div>
-
-    </div>
-    </div>
-
-    <div <%= (el) -> vis.binds.metro.tileDialogString(el, data.wid, data.dialog_oid, {title:data.dialog_title,flat:data.dialog_flat,shadow:data.dialog_shadow,overlay:data.dialog_modal,icon:data.dialog_icon_src,icon_class:data.dialog_icon_class,draggable:data.dialog_draggable,width:data.dialog_width,height:data.dialog_height},data.dialog_fontSize,data.dialog_padding,data.dialog_textAlign) %> style="padding: 42px 10px 10px;">
-    <div class="caption"></div>
-    <div class="content"></div></div>
-    </div>
-    <div <%= (el) -> vis.binds.metro.tile(el, data.transform) %>></div>
+        <div <%= (el) -> vis.binds.metro.tileDialogString(el, data.wid, data.dialog_oid, {title:data.dialog_title,flat:data.dialog_flat,shadow:data.dialog_shadow,overlay:data.dialog_modal,icon:data.dialog_icon_src,icon_class:data.dialog_icon_class,draggable:data.dialog_draggable,width:data.dialog_width,height:data.dialog_height},data.dialog_fontSize,data.dialog_padding,data.dialog_textAlign) %> style="padding: 42px 10px 10px;">
+            <div class="caption"></div>
+            <div class="content"></div></div>
+        </div>
+        <div <%= (el) -> vis.binds.metro.tile(el, data.transform) %>></div>
     </div>
 </script>
 
