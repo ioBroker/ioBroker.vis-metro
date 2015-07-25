@@ -6,6 +6,10 @@ Metro widget sets for ioBroker.vis
 
 ## Changelog
 
+### 0.1.2 (2015-07-25)
+- (bluefox) add mfd icons
+- (bluefox) fix widgets with sliders if "min" != 0
+
 ### 0.1.1 (2015-07-10)
 - (bluefox) make content_oid of "Tile Dialog / Badge Number" as object ID
 
