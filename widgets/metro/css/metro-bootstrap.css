@@ -7,6 +7,9 @@
     -o-box-sizing: border-box;
     box-sizing: border-box;
 }
+.metro .metro-invisible {
+  display: none;
+}
 .metro article,
 .metro aside,
 .metro details,

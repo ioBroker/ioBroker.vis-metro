@@ -6,6 +6,9 @@ Metro widget sets for ioBroker.vis
 
 ## Changelog
 
+### 0.1.3 (2015-08-05)
+- (bluefox) fix metro-tile-heating window icon
+
 ### 0.1.2 (2015-07-25)
 - (bluefox) add mfd icons
 - (bluefox) fix widgets with sliders if "min" != 0
