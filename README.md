@@ -6,6 +6,9 @@ Metro widget sets for ioBroker.vis
 
 ## Changelog
 
+### 0.1.4 (2015-08-11)
+- (bluefox) protect against double event: click and touchstart
+
 ### 0.1.3 (2015-08-05)
 - (bluefox) fix metro-tile-heating window icon
 

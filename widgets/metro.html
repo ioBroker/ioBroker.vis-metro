@@ -344,7 +344,13 @@
             if (isNaN(height)) height = undefined;
 
             if (view || html || vis.editMode) {
-                $(el).parent().click(function () {
+                $(el).parent().on('click touchstart', function () {
+                    // Protect against two events
+                    var now = (new Date()).getTime();
+                    var lastClick = $(this).data('lc');
+                    if (lastClick && now - lastClick < 50) return;
+                    $(this).data('lc', now);
+
                     $.metroDialog({
                         width:     width,
                         height:    height,
@@ -387,7 +393,13 @@
             if (isNaN(width))  width = undefined;
             if (isNaN(height)) height = undefined;
 
-            $(el).parent().click(function () {
+            $(el).parent().on('click touchstart', function () {
+                // Protect against two events
+                var now = (new Date()).getTime();
+                var lastClick = $(this).data('lc');
+                if (lastClick && now - lastClick < 50) return;
+                $(this).data('lc', now);
+
                 $.metroDialog({
                     width:     width,
                     height:    height,
@@ -433,7 +445,13 @@
             var range =  sliderOptions.max - sliderOptions.min;
             var factor = 100 / range;
 
-            $(el).parent().click(function () {
+            $(el).parent().on('click touchstart', function () {
+                // Protect against two events
+                var now = (new Date()).getTime();
+                var lastClick = $(this).data('lc');
+                if (lastClick && now - lastClick < 50) return;
+                $(this).data('lc', now);
+
                 $.metroDialog({
                     width:     width,
                     height:    height,
@@ -483,7 +501,13 @@
             temp_oid  = temp_oid  || '';
             drive_oid = drive_oid || '';
 
-            $(el).parent().click(function () {
+            $(el).parent().on('click touchstart', function () {
+                // Protect against two events
+                var now = (new Date()).getTime();
+                var lastClick = $(this).data('lc');
+                if (lastClick && now - lastClick < 50) return;
+                $(this).data('lc', now);
+
                 $.metroDialog({
                     width:     width,
                     height:    height,
