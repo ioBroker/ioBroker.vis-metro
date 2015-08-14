@@ -8,6 +8,7 @@ Metro widget sets for ioBroker.vis
 
 ### 0.1.6 (2015-08-14)
 - (bluefox) prepublish script
+- (bluefox) update toggle widget
 
 ### 0.1.5 (2015-08-12)
 - (bluefox) protect against double event: click and touchstart

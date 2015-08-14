@@ -938,7 +938,7 @@
         data-vis-attrs6="badge_bg_class_true[bg-teal]/style,metro-,bg-;"
         data-vis-attrs7="brand_bg_class_false[ribbed-steel]/style,metro-,bg- ribbed-;"
         data-vis-attrs8="brand_bg_class_true[ribbed-indigo]/style,metro-,bg- ribbed-;"
-        data-vis-attrs9="group.ccontrol;urlTrue;urlFalse;oidTrue/id;oidFalse/id;"
+        data-vis-attrs9="group.ccontrol;urlTrue;urlFalse;oidTrue/id;oidFalse/id;oidTrueValue;oidFalseValue;"
         data-vis-set="metro"
         data-vis-type="ctrl,bool"
         data-vis-name="Tile Toggle">
@@ -950,6 +950,8 @@
             data-url-false="<%= this.data.attr('urlFalse') %>"
             data-oid-true="<%=  this.data.attr('oidTrue') %>"
             data-oid-false="<%= this.data.attr('oidFalse') %>"
+            data-oid-true-value="<%=  this.data.attr('oidTrueValue') %>"
+            data-oid-false-value="<%= this.data.attr('oidFalseValue') %>"
             <%= (el) -> vis.binds.basic.toggle(el) %>
             >
             <div style="width:100%; height:100%;"  id="metroTile_<%= this.data.attr('wid') %>" class="tile icon <%= this.data.attr('hover') ? 'hover ' : '' %><%= (vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val')) == '_true') && this.data.attr('select_on_true') ? 'selected' : '' %> <%= this.data.attr('bg_class' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'))) %>" >
