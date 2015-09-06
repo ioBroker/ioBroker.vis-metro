@@ -1,7 +1,7 @@
 {
   "name": "iobroker.vis-metro",
   "description": "Metro Widgets for ioBroker.vis",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "author": {
     "name": "hobbyquaker",
     "email": "hq@ccu.io"
@@ -46,8 +46,7 @@
   },
   "main": "widgets/metro.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "node node_modules/grunt/lib/grunt prepublish"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "MIT"
 }

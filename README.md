@@ -6,6 +6,9 @@ Metro widget sets for ioBroker.vis
 
 ## Changelog
 
+### 0.1.8 (2015-09-06)
+- (bluefox) remove prepublish script because installation is not possible
+
 ### 0.1.6 (2015-08-14)
 - (bluefox) prepublish script
 - (bluefox) update toggle widget
