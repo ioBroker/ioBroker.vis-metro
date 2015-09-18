@@ -6443,6 +6443,7 @@
   position: relative;
   margin-top: 40px;
   width: 100%;
+  height: 88%; /*Для браузера не поддерживающего calc()*/
   height: calc(100% - 40px);
   overflow-y: auto;
   overflow-x: hidden;
