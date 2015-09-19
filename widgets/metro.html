@@ -2,7 +2,7 @@
 
     ioBroker.vis Metro Widget-Set
 
-    version: "0.1.6"
+    version: "0.1.9"
 
     6'2014-2015 hobbyquaker, bluefox
 
@@ -199,6 +199,7 @@
     });
 
     vis.binds.metro = {
+        version: "0.1.9",
         format: function (value, type, mustValue) {
             if (!type || type == 'bool') {
 
@@ -324,11 +325,11 @@
                         if ($this.attr('data-metro-nav-select') == 'true') {
                             $this.addClass("selected");
                         }
-                        $this.addClass($this.attr('data-metro-class-active'));
                         $this.removeClass($this.attr('data-metro-class'));
+                        $this.addClass($this.attr('data-metro-class-active'));
                     } else {
-                        $this.addClass($this.attr('data-metro-class'));
                         $this.removeClass($this.attr('data-metro-class-active'));
+                        $this.addClass($this.attr('data-metro-class'));
                         $this.removeClass('selected');
                     }
                 });
@@ -645,6 +646,7 @@
         }
     };
 
+	console.log('Metro version: "' + vis.binds.metro.version + '"');
 </script>
 
 <script id="tplMetroSlider"

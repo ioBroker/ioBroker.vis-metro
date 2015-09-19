@@ -2,9 +2,16 @@
 ioBroker.vis-metro
 ============
 
-Metro widget sets for ioBroker.vis
+Metro widget sets for ioBroker.vis. Widgets are styled as Windows Metro interface.
+![Demo2.png](Screenshot)
+
+Build with http://metroui.org.ua/. 
 
 ## Changelog
+
+### 0.1.9 (2015-09-19)
+- (bluefox) fix Navigation widget: Brand Background wird nicht angezeigt, sobald Brand Background inactive und Brand Background active den selben Wert haben.
+- (instalator) support of old browsers
 
 ### 0.1.8 (2015-09-06)
 - (bluefox) remove prepublish script because installation is not possible

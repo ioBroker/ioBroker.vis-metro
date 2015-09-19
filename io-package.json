@@ -1,7 +1,7 @@
 {
     "common": {
         "name":                     "vis-metro",
-        "version": "0.1.8",
+        "version": "0.1.9",
         "title":                    "ioBroker Visualisation - metro style Widgets",
         "desc": {
             "en":                   "metro Widgets for ioBroker.vis",

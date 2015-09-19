@@ -31,6 +31,10 @@ module.exports = function (grunt) {
                         {
                             match: /"version": *"[\.0-9]*",/g,
                             replacement: '"version": "' + version + '",'
+                        },
+                        {
+                            match: /version: *"[\.0-9]*",/g,
+                            replacement: 'version: "' + version + '",'
                         }
                     ]
                 },
@@ -77,97 +81,18 @@ module.exports = function (grunt) {
                     url: 'https://raw.githubusercontent.com/ioBroker/ioBroker.build/master/adapters/Gruntfile.js'
                 },
                 dest: 'Gruntfile.js'
-            },*/
+            },
             get_utilsfile: {
                 options: {
                     url: 'https://raw.githubusercontent.com/ioBroker/ioBroker.build/master/adapters/utils.js'
                 },
                 dest: 'lib/utils.js'
-            },
+            },*/
             get_jscsRules: {
                 options: {
                     url: 'https://raw.githubusercontent.com/ioBroker/ioBroker.js-controller/master/tasks/jscsRules.js'
                 },
                 dest: 'tasks/jscsRules.js'
-            },
-            get_iconOnline: {
-                options: {
-                    encoding: null,
-                    url: iopackage.common.extIcon || 'https://raw.githubusercontent.com/ioBroker/ioBroker.js-controller/master/adapter/example/admin/example.png'
-                },
-                dest: dstDir + 'ioBroker.adapter.' + iopackage.common.name + '.png'
-
-            },
-            get_iconOffline: {
-                options: {
-                    encoding: null,
-                    url: iopackage.common.extIcon || 'https://raw.githubusercontent.com/ioBroker/ioBroker.js-controller/master/adapter/example/admin/example.png'
-                },
-                dest: dstDir + 'ioBroker.adapter.offline.' + iopackage.common.name + '.png'
-
-            }
-        },
-        compress: {
-            adapter: {
-                options: {
-                    archive: dstDir + 'ioBroker.adapter.' + iopackage.common.name + '.zip'
-                },
-                files: [
-                    {
-                        expand: true,
-                        src: ['**', '!tasks/*', '!Gruntfile.js', '!node_modules/**/*', '!build/**/*'],
-                        dest: '/',
-                        cwd: srcDir
-                    }
-                ]
-            },
-            adapterOffline: {
-                options: {
-                    archive: dstDir + 'ioBroker.adapter.offline.' + iopackage.common.name + '.zip'
-                },
-                files: [
-                    {
-                        expand: true,
-                        src: ['**',
-                            '!tasks/*',
-                            '!Gruntfile.js',
-                            '!build/**/*',
-                            '!node_modules/grunt/**/*',
-                            '!node_modules/grunt*/**/*'
-                        ],
-                        dest: '/',
-                        cwd: srcDir
-                    }
-                ]
-            }
-        },
-        exec: {
-            npm: {
-                cmd: 'npm install'
-            }
-        },
-        copy: {
-            json: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: srcDir,
-                        src: ['io-package.json'],
-                        dest: dstDir,
-                        rename: function (dest, src) {
-                            return dstDir + 'ioBroker.adapter.offline.' + iopackage.common.name + '.json';
-                        }
-                    },
-                    {
-                        expand: true,
-                        cwd: srcDir,
-                        src: ['io-package.json'],
-                        dest: dstDir,
-                        rename: function (dest, src) {
-                            return dstDir + 'ioBroker.adapter.' + iopackage.common.name + '.json';
-                        }
-                    }
-                ]
             }
         }
     });
