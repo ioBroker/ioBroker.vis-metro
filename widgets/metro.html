@@ -169,7 +169,7 @@
         "Set temperature":      {"en": "Set temperature",   "de": "Soll-Temperatur",    "ru": "Выставленная темп."},
         "Actual temp.":         {"en": "Actual temp.",      "de": "Ist-Temperatur",     "ru": "Актуальная темп."},
         "Valve position":       {"en": "Valve position",    "de": "Ventilstellung",     "ru": "Позиция вентиля"},
-        "Humidity":             {"en": "Humidity",          "de": "Luftfeuchtigkeit",   "ru": "влажность"},
+        "Humidity":             {"en": "Humidity",          "de": "Luftfeuchtigkeit",   "ru": "Влажность"},
         "Target":               {"en": "Target",            "de": "Soll",               "ru": "Должно"},
         "Actual":               {"en": "Now",               "de": "Ist",                "ru": "Сейчас"},
         "group_service":        {"en": "Service",           "de": "Service",            "ru": "Сервис"},
@@ -1367,7 +1367,7 @@
                                 <tr><td><%== this.data.attr('label_drive') ? this.data.attr('label_drive') : _('Valve position') %>:</td><td><%=  vis.binds.metro.format(vis.states.attr(this.data.attr('drive_oid') + '.val'), '%') %></td></tr>
                             <% } %>
                             <% if (this.data.attr('hum_oid')) { %>
-                                <tr><td><%== this.data.attr('label_humitdy') ? this.data.attr('label_humitdy') : _('Humidity') %>:</td><td><%=  vis.binds.metro.format(vis.states.attr(this.data.attr('hum_oid') + '.val'), '%') %></td></tr>
+                                <tr><td><%== this.data.attr('label_humidity') ? this.data.attr('label_humidity') : _('Humidity') %>:</td><td><%=  vis.binds.metro.format(vis.states.attr(this.data.attr('hum_oid') + '.val'), '%') %></td></tr>
                             <% } %>
                         </table>
                     </div>
