@@ -3,7 +3,7 @@ ioBroker.vis-metro
 ============
 
 Metro widget sets for ioBroker.vis. Widgets are styled as Windows Metro interface.
-![img/Demo2.png](Screenshot)
+![Screenshot](img/Demo2.png)
 
 Build with http://metroui.org.ua/. 
 
