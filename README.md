@@ -9,6 +9,9 @@ Build with http://metroui.org.ua/.
 
 ## Changelog
 
+### 0.1.10 (2015-12-01)
+- (bluefox) fix bool/number widget: badge icon.
+
 ### 0.1.9 (2015-09-19)
 - (bluefox) fix Navigation widget: Brand Background wird nicht angezeigt, sobald Brand Background inactive und Brand Background active den selben Wert haben.
 - (instalator) support of old browsers
