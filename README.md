@@ -9,6 +9,9 @@ Build with http://metroui.org.ua/.
 
 ## Changelog
 
+### 0.1.11 (2015-12-03)
+- (bluefox) fix Tile ValueList 8: badge icon.
+
 ### 0.1.10 (2015-12-01)
 - (bluefox) fix bool/number widget: badge icon.
 

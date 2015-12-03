@@ -2,7 +2,7 @@
 
     ioBroker.vis Metro Widget-Set
 
-    version: "0.1.9"
+    version: "0.1.11"
 
     6'2014-2015 hobbyquaker, bluefox
 
@@ -199,7 +199,7 @@
     });
 
     vis.binds.metro = {
-        version: "0.1.9",
+        version: "0.1.11",
         format: function (value, type, mustValue) {
             if (!type || type == 'bool') {
 
@@ -852,7 +852,7 @@
                     </div>
                     <div class="brand <%= this.data.attr('brand_bg_class' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'), 10)) %>">
                         <span class="label fg-white"><%== this.data.attr('label_prepend') %><%== this.data.attr('label' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'), 10)) %><%== this.data.attr('label_append') %></span>
-                        <div class="badge <%= this.data.attr('badge_bg_class' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'), 10)) %>"></i></div>
+                        <div class="badge <%= this.data.attr('badge_bg_class' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'), 10)) %>"><i class="<%= this.data.attr('icon_badge' + vis.states.attr(this.data.attr('oid') + '.val')) %>"></i></div>
                     </div>
                 </div>
                 <div <%= (el) -> vis.binds.metro.tile(el, data.transform) %>></div>

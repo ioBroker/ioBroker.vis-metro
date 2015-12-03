@@ -150,4 +150,8 @@ module.exports = function (grunt) {
         'http',
         'replace'
     ]);
+	grunt.registerTask('p', [
+        'http',
+        'replace'
+    ]);
 };
