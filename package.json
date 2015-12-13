@@ -1,7 +1,7 @@
 {
   "name": "iobroker.vis-metro",
   "description": "Metro Widgets for ioBroker.vis",
-  "version": "0.1.11",
+  "version": "0.2.0",
   "author": {
     "name": "hobbyquaker",
     "email": "hq@ccu.io"

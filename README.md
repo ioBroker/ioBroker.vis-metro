@@ -8,6 +8,8 @@ Metro widget sets for ioBroker.vis. Widgets are styled as Windows Metro interfac
 Build with http://metroui.org.ua/. 
 
 ## Changelog
+### 0.2.0 (2015-12-14)
+- (bluefox) add custom icon for badges
 
 ### 0.1.11 (2015-12-03)
 - (bluefox) fix Tile ValueList 8: badge icon.
