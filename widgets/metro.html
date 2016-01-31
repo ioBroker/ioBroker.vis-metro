@@ -2,7 +2,7 @@
 
     ioBroker.vis Metro Widget-Set
 
-    version: "0.2.0"
+    version: "0.2.1"
 
     6'2014-2015 hobbyquaker, bluefox
 
@@ -206,7 +206,7 @@
     });
 
     vis.binds.metro = {
-        version: "0.2.0",
+        version: "0.2.1",
         format: function (value, type, mustValue) {
             if (!type || type == 'bool') {
 
@@ -848,6 +848,46 @@
     </div>
 </script>
 
+<script id="tplMetroTileBoolDialog"
+        type="text/ejs"
+        class="vis-tpl"
+        data-vis-prev='<div id="prev_tplMetroTileBoolDialog" style="position: relative; text-align: initial;padding: 4px "><div class="vis-widget_prev " style="width: 120px; height: 120px; padding: 3px;"> <div style="width:100%; height:100%" class="metro vis-widget-prev-body"><div style="width:100%; height:100%;" class="tile hover bg-indigo"> <div class="tile-content icon"> <i class="icon-newspaper"></i> </div> <div class="brand ribbed-steel"> <span class="label fg-white">Boolean</span> <div class="badge bg-cyan"><i class="icon-folder"></i></div> </div> </div> </div> </div></div>'
+        data-vis-attrs="oid;hover[true]/checkbox;transform/checkbox;select_on_true/checkbox;label_false[false];label_true[true];"
+        data-vis-attrs0="bg_class_false[bg-indigo]/style,metro-,bg- ribbed-;"
+        data-vis-attrs1="bg_class_true[bg-teal]/style,metro-,bg- ribbed-;"
+        data-vis-attrs2="group.icon;icon_false/image;icon_true/image;icon_width/slider,0,100,1;icon_height/slider,0,100,1;icon_top/slider,0,100,1;icon_left/slider,0,100,1;"
+        data-vis-attrs3="icon_class_false[icon-cancel-2]/style,iconFont,icon-,,Icon ;"
+        data-vis-attrs4="icon_class_true[icon-checkmark]/style,iconFont,icon-,,Icon ;"
+        data-vis-attrs5="group.badge;icon_badge_false[icon-folder-2]/style,iconFont,icon-,,Icon ;icon_badge_true[icon-folder]/style,iconFont,icon-,,Icon ;"
+        data-vis-attrs6="badge_bg_class_false[bg-cyan]/style,metro-,bg-;badge_bg_class_true[bg-teal]/style,metro-,bg-;"
+        data-vis-attrs7="badge_src_false/image;badge_src_true/image;badge_width/slider,0,100,1;badge_height/slider,0,100,1;badge_top[0]/slider,0,100,1;badge_left[0]/slider,0,100,1;"
+        data-vis-attrs8="brand_bg_class_false[ribbed-steel]/style,metro-,bg- ribbed-;brand_bg_class_true[ribbed-indigo]/style,metro-,bg- ribbed-;"
+        data-vis-attrs9="group.dialog;contains_view/views;dialog_width;dialog_height;dialog_title;dialog_flat/checkbox;dialog_shadow/checkbox;dialog_draggable[true]/checkbox;dialog_modal/checkbox;dialog_icon_src/image;dialog_icon_class[]/style,iconFont,icon-,,Icon ;"
+        data-vis-set="metro"
+        data-vis-type="bool,dialog"
+        data-vis-name="Tile Bool Dialog">
+    <div id="<%= this.data.attr('wid') %>" class="vis-widget" style="width:136px; height:136px; padding: 3px;">
+        <div style="width:100%; height:100%" class="metro vis-widget-body <%== this.data.attr('class') %>" data-oid="<%= this.data.attr('oid') %>">
+            <div style="width:100%; height:100%;" id="metroTile_<%= this.data.attr('wid') %>" class="tile <%= this.data.attr('hover') ? 'hover ' : '' %><%= (vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val')) == '_true') && this.data.attr('select_on_true') ? 'selected' : '' %> <%= this.data.attr('bg_class' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'))) %>" >
+                <div class="tile-content icon <%= this.data.attr("icon_class" + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'))) ? '' : 'icon-custom' %>">
+                    <%== this.data.attr('icon' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'))) ? '<img style="position: absolute;' + (this.data.attr('icon_top') ? ('top:' + this.data.attr('icon_top') + '%;') : '') + (this.data.attr('icon_left') ? ('left:' + this.data.attr('icon_left') + '%;') : '') + (this.data.attr('icon_width') ? ('width:' + this.data.attr('icon_width') + '%;') : '') + (this.data.attr('icon_height') ? ('height:' + this.data.attr('icon_height') + '%;') : '') + '" src="' + this.data.attr('icon' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'))) + '"/>' : '' %>
+                    <i class="<%= this.data.attr('icon_class' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'))) %>"></i>
+                </div>
+                <div class="brand <%= this.data.attr('brand_bg_class' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'))) %>">
+                    <span class="label fg-white"><%== this.data.attr('label' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'))) %></span>
+                    <div class="badge <%= this.data.attr('badge_bg_class' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'))) %>">
+                        <i class="<%= this.data.attr('icon_badge' + vis.binds.metro.format(vis.states.attr(this.data.attr('oid') + '.val'))) %>"></i>
+                        <%== this.data.attr('badge_src' + vis.binds.metro.format(vis.states.attr(this.data.attr('state_oid') + '.val'))) ? '<img style="position: absolute;' + (this.data.attr('badge_top') ? ('top:' + this.data.attr('badge_top') + '%;') : '') + (this.data.attr('badge_left') ? ('left:' + this.data.attr('badge_left') + '%;') : '') + (this.data.attr('badge_width') ? ('width:' + this.data.attr('badge_width') + '%;') : '') + (this.data.attr('badge_height') ? ('height:' + this.data.attr('badge_height') + '%;') : '') + '" src="' + this.data.attr('badge_src' + vis.binds.metro.format(vis.states.attr(this.data.attr('state_oid') + '.val'))) + '"/>' : '' %>
+                    </div>
+                </div>
+            </div>
+            <div <%= (el) -> vis.binds.metro.tileDialog(el, data.wid, data.contains_view, {title:data.dialog_title,flat:data.dialog_flat,shadow:data.dialog_shadow,overlay:data.dialog_modal,icon:data.dialog_icon_src,icon_class:data.dialog_icon_class,draggable:data.dialog_draggable,width:data.dialog_width,height:data.dialog_height}) %> style="padding: 42px 10px 10px;">
+            </div>
+            <div <%= (el) -> vis.binds.metro.tile(el, data.transform) %>></div>
+        </div>
+    </div>
+</script>
+
 <script id="tplMetroTileList8"
         type="text/ejs"
         class="vis-tpl"
@@ -1480,7 +1520,7 @@
         data-vis-attrs2="group.badge;icon_badge[]/style,iconFont,icon-,,Icon ;"
         data-vis-attrs3="badge_bg_class[]/style,metro-,bg-;"
         data-vis-attrs4="brand_bg_class[ribbed-steel]/style,metro-,bg- ribbed-;"
-        data-vis-attrs5="group.dialog;html;dialog_width;dialog_height;dialog_title;dialog_flat/checkbox;dialog_shadow/checkbox;dialog_draggable[true]/checkbox;dialog_modal/checkbox;dialog_icon_src/image;dialog_icon_class[]/style,iconFont,icon-,,Icon ;"
+        data-vis-attrs5="group.dialog;html/html;dialog_width;dialog_height;dialog_title;dialog_flat/checkbox;dialog_shadow/checkbox;dialog_draggable[true]/checkbox;dialog_modal/checkbox;dialog_icon_src/image;dialog_icon_class[]/style,iconFont,icon-,,Icon ;"
         data-vis-set="metro"
         data-vis-type="ctrl,dialog"
         data-vis-name="static - Tile Dialog">
@@ -1513,7 +1553,7 @@
         data-vis-attrs="content_oid/id;number_oid/id;hide_on_0/checkbox;hover[true]/checkbox;transform[true]/checkbox;bg_class[bg-indigo]/style,metro-,bg- ribbed-;"
         data-vis-attrs0="group.icon;icon_src/image;icon_width/slider,0,100,1;icon_height/slider,0,100,1;icon_top/slider,0,100,1;icon_left/slider,0,100,1;icon_class[icon-pictures]/style,iconFont,icon-,,Icon ;"
         data-vis-attrs1="group.badge;label;badge_bg_class[]/style,metro-,bg-;brand_bg_class[ribbed-steel]/style,metro-,bg- ribbed-;"
-        data-vis-attrs2="group.dialog;html;dialog_width;dialog_height;dialog_title;dialog_flat/checkbox;dialog_shadow/checkbox;dialog_draggable[true]/checkbox;dialog_modal/checkbox;dialog_icon_src/image;dialog_icon_class[]/style,iconFont,icon-,,Icon ;"
+        data-vis-attrs2="group.dialog;html/html;dialog_width;dialog_height;dialog_title;dialog_flat/checkbox;dialog_shadow/checkbox;dialog_draggable[true]/checkbox;dialog_modal/checkbox;dialog_icon_src/image;dialog_icon_class[]/style,iconFont,icon-,,Icon ;"
         data-vis-set="metro"
         data-vis-type="static,dialog"
         data-vis-name="Tile Dialog / val - Badge Number">

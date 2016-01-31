@@ -1,6 +1,11 @@
 ![Logo](admin/metro.png)
 ioBroker.vis-metro
 ============
+[![NPM version](http://img.shields.io/npm/v/iobroker.vis-metro.svg)](https://www.npmjs.com/package/iobroker.vis-metro)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.vis-metro.svg)](https://www.npmjs.com/package/iobroker.vis-metro)
+
+[![NPM](https://nodei.co/npm/iobroker.vis-metro.png?downloads=true)](https://nodei.co/npm/iobroker.vis-metro/)
+
 
 Metro widget sets for ioBroker.vis. Widgets are styled as Windows Metro interface.
 ![Screenshot](img/Demo2.png)
@@ -8,6 +13,9 @@ Metro widget sets for ioBroker.vis. Widgets are styled as Windows Metro interfac
 Build with http://metroui.org.ua/. 
 
 ## Changelog
+### 0.2.1 (2016-01-31)
+- (vore) add tplMetroTileBoolDialog
+
 ### 0.2.0 (2015-12-14)
 - (bluefox) add custom icon for badges
 
