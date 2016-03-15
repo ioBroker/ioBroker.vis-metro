@@ -1,7 +1,7 @@
 {
     "common": {
         "name":                     "vis-metro",
-        "version": "0.2.1",
+        "version": "1.0.0",
         "title":                    "ioBroker Visualisation - metro style Widgets",
         "desc": {
             "en":                   "metro Widgets for ioBroker.vis",
@@ -25,7 +25,8 @@
         "onlyWWW":                  true,
         "singleton":                true,
         "type":                     "vis",
-		"restartAdapters":          ["vis"]
+		"restartAdapters":          ["vis"],
+		"noConfig":                 true
     },
     "native": {
         "dependencies":          ["jqui-mfd", "basic"]

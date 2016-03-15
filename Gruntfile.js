@@ -52,6 +52,14 @@ module.exports = function (grunt) {
                         ],
                         dest:    srcDir + 'widgets'
                     },
+                    {
+                        expand:  true,
+                        flatten: true,
+                        src:     [
+                                srcDir + 'widgets/' + pkg.name.substring('iobroker.vis-'.length) + '/js/' + pkg.name.substring('iobroker.vis-'.length)  + '.js'
+                        ],
+                        dest:    srcDir + 'widgets/' + pkg.name.substring('iobroker.vis-'.length) + '/js'
+                    }
                 ]
             }
         },
