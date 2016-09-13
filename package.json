@@ -1,13 +1,13 @@
 {
   "name": "iobroker.vis-metro",
   "description": "Metro Widgets for ioBroker.vis",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "hobbyquaker",
     "email": "hq@ccu.io"
   },
   "contributors": [
-    "bluefox <bluefox@ccu.io>",
+    "bluefox <dogafox@gmail.com>",
     "hobbyquaker <hq@ccu.io>"
   ],
   "homepage": "https://github.com/ioBroker/ioBroker.vis-metro",

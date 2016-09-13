@@ -1,7 +1,14 @@
 {
     "common": {
         "name":                     "vis-metro",
-        "version": "1.0.0",
+        "version": "1.0.1",
+		"news": {
+			"1.0.1": {
+				"en": "fix Metro Widget Tile Dialog",
+				"de": "Korrigiert Widget Tile Dialog",
+				"ru": "Исправлен виджет навигации"
+			}
+		},
         "title":                    "ioBroker Visualisation - metro style Widgets",
         "desc": {
             "en":                   "metro Widgets for ioBroker.vis",

@@ -13,6 +13,9 @@ Metro widget sets for ioBroker.vis. Widgets are styled as Windows Metro interfac
 Build with http://metroui.org.ua/. 
 
 ## Changelog
+### 1.0.1 (2016-09-13)
+- (bluefox) fix Metro Widget "Tile Dialog" 
+
 ### 1.0.0 (2016-03-15)
 - (bluefox) remove configuration dialog
 
