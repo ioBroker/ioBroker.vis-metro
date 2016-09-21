@@ -3,6 +3,11 @@
         "name":                     "vis-metro",
         "version": "1.0.1",
 		"news": {
+			"1.0.2": {
+				"en": "fix Metro Widget Tile State / val Badge Number",
+				"de": "Korrigiert Widget Tile State / val Badge Number",
+				"ru": "Исправлен виджет Tile State / val Badge Number"
+			},
 			"1.0.1": {
 				"en": "fix Metro Widget Tile Dialog",
 				"de": "Korrigiert Widget Tile Dialog",
