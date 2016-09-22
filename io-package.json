@@ -1,9 +1,9 @@
 {
     "common": {
         "name":                     "vis-metro",
-        "version": "1.0.2",
+        "version": "1.0.3",
 		"news": {
-			"1.0.2": {
+			"1.0.3": {
 				"en": "fix Metro Widget Tile State / val Badge Number",
 				"de": "Korrigiert Widget Tile State / val Badge Number",
 				"ru": "Исправлен виджет Tile State / val Badge Number"
