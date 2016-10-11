@@ -1,9 +1,14 @@
 {
     "common": {
         "name":                     "vis-metro",
-        "version": "1.0.3",
+        "version": "1.0.4",
 		"news": {
-			"1.0.3": {
+          "1.0.4": {
+            "en": "fix Metro Widget Heating",
+            "de": "Korrigiert Metro Widget Heating",
+            "ru": "Исправлен виджет Metro Widget Heating"
+          },
+          "1.0.3": {
 				"en": "fix Metro Widget Tile State / val Badge Number",
 				"de": "Korrigiert Widget Tile State / val Badge Number",
 				"ru": "Исправлен виджет Tile State / val Badge Number"

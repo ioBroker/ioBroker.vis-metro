@@ -2,7 +2,7 @@
 
     ioBroker.vis Metro Widget-Set
 
-    version: "1.0.1"
+    version: "1.0.4"
 
     6'2014-2016 hobbyquaker, bluefox
 
@@ -210,7 +210,7 @@
     });
 
     vis.binds.metro = {
-        version: "1.0.1",
+        version: "1.0.4",
         format: function (value, type, mustValue) {
             if (!type || type === 'bool') {
 
@@ -557,8 +557,8 @@
                                 '</table>';
 
                         content.html(html);
-                        sliderOptions.min = options.min === undefined ? 6  : options.min;
-                        sliderOptions.max = options.min === undefined ? 30 : options.max;
+                        sliderOptions.min = sliderOptions.min === undefined ? 6  : parseFloat(sliderOptions.min);
+                        sliderOptions.max = sliderOptions.max === undefined ? 30 : parseFloat(sliderOptions.max);
                         if (set_oid) {
                             vis.binds.metro.slider(document.getElementById('metroSlider_' + wid), sliderOptions);
                             vis.states.bind(set_oid   + '.val', function (e, newVal, oldVal) {
@@ -1460,7 +1460,7 @@
                         </table>
                     </div>
                     <div style="clear: both; margin: 0 12px;" data-oid="<%= this.data.attr('set_oid') %>" data-oid-working="<%= this.data.attr('oid-working') %>" id="metroSlider_<%= this.data.attr('wid') %>" class="slider" data-role="slider"></div>
-                    <div <%= (el) -> vis.binds.metro.slider(el, {color: data.sliderColor, completeColor: data.sliderCompleteColor, markerColor: data.sliderMarkerColor, max: data.max || 30, min: data.min || 6, step: parseFloat(data.step) || 0.1, hideIfNoOid: true}) %>></div>
+                    <div <%= (el) -> vis.binds.metro.slider(el, {color: data.sliderColor, completeColor: data.sliderCompleteColor, markerColor: data.sliderMarkerColor, max: (data.max === '' || data.max === undefined || data.max === null) ? 30 : data.max, min: (data.min === '' || data.min === undefined || data.min === null) ? 6 : data.min, step: parseFloat(data.step) || 0.1, hideIfNoOid: true}) %>></div>
                 </div>
                 <div class="brand <%= this.data.attr("brand_bg_class") %>">
                     <span class="label fg-white"><%= this.data.attr("label") %></span>
@@ -1512,7 +1512,7 @@
                     <span class="label fg-white"><%= this.data.attr("label") %></span>
                 </div>
             </div>
-            <div <%= (el) -> vis.binds.metro.tileDialogHeating(el, data.wid, data.set_oid, data.temp_oid, data.drive_oid, {title: data.label, flat:data.dialog_flat, shadow: data.dialog_shadow, overlay:data.dialog_modal, icon:data.dialog_icon_src, icon_class:data.dialog_icon_class, draggable:data.dialog_draggable, width:300, height: 180, label_set: this.data.attr('label_set'), label_temp: this.data.attr('label_temp'), label_drive: this.data.attr('label_drive')}, {color:data.sliderColor, completeColor:data.sliderCompleteColor, markerColor:data.sliderMarkerColor, max:data.max, min:data.min, step: parseFloat(data.step)}); %>></div>
+            <div <%= (el) -> vis.binds.metro.tileDialogHeating(el, data.wid, data.set_oid, data.temp_oid, data.drive_oid, {title: data.label, flat: data.dialog_flat, shadow: data.dialog_shadow, overlay: data.dialog_modal, icon: data.dialog_icon_src, icon_class: data.dialog_icon_class, draggable: data.dialog_draggable, width: 300, height: 180, label_set: this.data.attr('label_set'), label_temp: this.data.attr('label_temp'), label_drive: this.data.attr('label_drive')}, {color: data.sliderColor, completeColor: data.sliderCompleteColor, markerColor: data.sliderMarkerColor, max: data.max, min: data.min, step: parseFloat(data.step)}); %>></div>
             <div <%= (el) -> vis.binds.metro.tile(el, data.transform) %>></div>
         </div>
     </div>

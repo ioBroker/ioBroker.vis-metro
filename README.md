@@ -13,6 +13,9 @@ Metro widget sets for ioBroker.vis. Widgets are styled as Windows Metro interfac
 Build with http://metroui.org.ua/. 
 
 ## Changelog
+### 1.0.4 (2016-10-11)
+- (bluefox) fix Metro Widget Heating
+
 ### 1.0.3 (2016-09-21)
 - (bluefox) fix Metro Widget Tile State / val Badge Number 
 
