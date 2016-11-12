@@ -1,8 +1,13 @@
 {
     "common": {
         "name":                     "vis-metro",
-        "version": "1.0.4",
+        "version": "1.1.0",
 		"news": {
+		  "1.1.0": {
+            "en": "Support of new concept by vis",
+            "de": "Unterstützung vom neuen vis-Konzept",
+            "ru": "Поддержка нового концепта vis"
+          },
           "1.0.4": {
             "en": "fix Metro Widget Heating",
             "de": "Korrigiert Metro Widget Heating",
@@ -38,7 +43,7 @@
         ],
         "localLink":                "%web_protocol%://%ip%:%web_port%/vis/edit.html",
         "license":                  "MIT",
-        "dependencies":             ["vis"],
+        "dependencies":             [{"vis": ">=0.11.1"}],
         "onlyWWW":                  true,
         "singleton":                true,
         "type":                     "vis",

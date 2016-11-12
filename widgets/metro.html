@@ -386,10 +386,10 @@
                             } else {
                                 content.html('<div class="vis-view-container" data-vis-contains="' + view + '"></div>');
                                 if (vis.views[view]) {
-                                    vis.renderView(view);
+                                    vis.renderView(view, function (_view) {
+                                        $('#visview_' + _view).appendTo(content).show();
+                                    });
                                 }
-                                $('#visview_' + view).appendTo(content);
-                                $('#visview_' + view).show();
                             }
                         }
                     });
