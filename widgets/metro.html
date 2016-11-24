@@ -386,7 +386,7 @@
                             } else {
                                 content.html('<div class="vis-view-container" data-vis-contains="' + view + '"></div>');
                                 if (vis.views[view]) {
-                                    vis.renderView(view, function (_view) {
+                                    vis.renderView(view, view, false, function (_view) {
                                         $('#visview_' + _view).appendTo(content).show();
                                     });
                                 }
