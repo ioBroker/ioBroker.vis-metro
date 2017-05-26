@@ -59,7 +59,7 @@ function touch2Mouse(e)
 (function( $ ) {
     $.widget("metro.tileTransform", {
 
-        version: "1.0.0",
+        version: "1.1.1",
 
         options: {
         },
