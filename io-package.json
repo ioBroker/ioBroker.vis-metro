@@ -1,63 +1,77 @@
 {
     "common": {
-        "name":                     "vis-metro",
+        "name": "vis-metro",
         "version": "1.1.1",
-		"news": {
-		  "1.1.1": {
-            "en": "2 Widgets added\nfix tplMetroTileStateNumber",
-            "de": "2 Widgets hinzugefügt\nfix tplMetroTileStateNumber",
-            "ru": "Добавлено 2 виджета\nИсправлен MetroTileStateNumber"
-          },
-		  "1.1.0": {
-            "en": "Support of new concept by vis",
-            "de": "Unterstützung vom neuen vis-Konzept",
-            "ru": "Поддержка нового концепта vis"
-          },
-          "1.0.4": {
-            "en": "fix Metro Widget Heating",
-            "de": "Korrigiert Metro Widget Heating",
-            "ru": "Исправлен виджет Metro Widget Heating"
-          },
-          "1.0.3": {
-				"en": "fix Metro Widget Tile State / val Badge Number",
-				"de": "Korrigiert Widget Tile State / val Badge Number",
-				"ru": "Исправлен виджет Tile State / val Badge Number"
-			},
-			"1.0.1": {
-				"en": "fix Metro Widget Tile Dialog",
-				"de": "Korrigiert Widget Tile Dialog",
-				"ru": "Исправлен виджет навигации"
-			}
-		},
-        "title":                    "ioBroker Visualisation - metro style Widgets",
-        "desc": {
-            "en":                   "metro Widgets for ioBroker.vis",
-            "de":                   "metro Widgets für ioBroker.vis",
-            "ru":                   "metro Widgets для ioBroker.vis"
+        "news": {
+            "1.1.1": {
+                "en": "2 Widgets added\nfix tplMetroTileStateNumber",
+                "de": "2 Widgets hinzugefügt\nfix tplMetroTileStateNumber",
+                "ru": "Добавлено 2 виджета\nИсправлен MetroTileStateNumber"
+            },
+            "1.1.0": {
+                "en": "Support of new concept by vis",
+                "de": "Unterstützung vom neuen vis-Konzept",
+                "ru": "Поддержка нового концепта vis"
+            },
+            "1.0.4": {
+                "en": "fix Metro Widget Heating",
+                "de": "Korrigiert Metro Widget Heating",
+                "ru": "Исправлен виджет Metro Widget Heating"
+            },
+            "1.0.3": {
+                "en": "fix Metro Widget Tile State / val Badge Number",
+                "de": "Korrigiert Widget Tile State / val Badge Number",
+                "ru": "Исправлен виджет Tile State / val Badge Number"
+            },
+            "1.0.1": {
+                "en": "fix Metro Widget Tile Dialog",
+                "de": "Korrigiert Widget Tile Dialog",
+                "ru": "Исправлен виджет навигации"
+            }
         },
-        "platform":                 "Javascript/Node.js",
-        "loglevel":                 "info",
-        "icon":                     "metro.png",
-        "enabled":                  true,
-        "mode":                     "once",
-        "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.vis-metro/master/admin/metro.png",
-        "keywords":                 ["metro", "vis", "GUI", "graphical", "scada"],
-        "readme":                   "https://github.com/ioBroker/ioBroker.vis-metro/blob/master/README.md",
+        "title": "ioBroker Visualisation - metro style Widgets",
+        "desc": {
+            "en": "metro Widgets for ioBroker.vis",
+            "de": "metro Widgets für ioBroker.vis",
+            "ru": "metro Widgets для ioBroker.vis"
+        },
+        "platform": "Javascript/Node.js",
+        "loglevel": "info",
+        "icon": "metro.png",
+        "enabled": true,
+        "mode": "once",
+        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.vis-metro/master/admin/metro.png",
+        "keywords": [
+            "metro",
+            "vis",
+            "GUI",
+            "graphical",
+            "scada"
+        ],
+        "readme": "https://github.com/ioBroker/ioBroker.vis-metro/blob/master/README.md",
         "authors": [
             "hobbyquaker <hq@ccu.io>"
         ],
-        "localLink":                "%web_protocol%://%ip%:%web_port%/vis/edit.html",
-        "license":                  "MIT",
-        "dependencies":             [{"vis": ">=0.11.1"}],
-        "onlyWWW":                  true,
-        "singleton":                true,
-        "type":                     "vis",
-		"restartAdapters":          ["vis"],
-		"noConfig":                 true
+        "localLink": "%web_protocol%://%ip%:%web_port%/vis/edit.html",
+        "license": "MIT",
+        "dependencies": [
+            {
+                "vis": ">=0.11.1"
+            }
+        ],
+        "onlyWWW": true,
+        "singleton": true,
+        "type": "visualization-widgets",
+        "restartAdapters": [
+            "vis"
+        ],
+        "noConfig": true
     },
     "native": {
-        "dependencies":          ["jqui-mfd", "basic"]
+        "dependencies": [
+            "jqui-mfd",
+            "basic"
+        ]
     },
-    "instanceObjects": [
-    ]
+    "instanceObjects": []
 }
