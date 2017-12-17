@@ -13,6 +13,9 @@ Metro widget sets for ioBroker.vis. Widgets are styled as Windows Metro interfac
 Build with http://metroui.org.ua/. 
 
 ## Changelog
+### 1.1.2 (2017-12-17)
+- (bluefox) Fixed metro-string widget
+
 ### 1.1.1 (2017-05-27)
 - (mctom) 2 Widgets added
 - (buanet) fix tplMetroTileStateNumber
