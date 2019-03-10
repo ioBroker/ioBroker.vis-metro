@@ -1,7 +1,7 @@
 ![Logo](admin/metro.png)
 ioBroker.vis-metro
 ============
-[![NPM version](http://img.shields.io/npm/v/iobroker.vis-metro.svg)](https://www.npmjs.com/package/iobroker.vis-metro)
+![Number of Installations](http://iobroker.live/badges/vis-metro-installed.svg) ![Number of Installations](http://iobroker.live/badges/vis-metro-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.vis-metro.svg)](https://www.npmjs.com/package/iobroker.vis-metro)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.vis-metro.svg)](https://www.npmjs.com/package/iobroker.vis-metro)
 
 [![NPM](https://nodei.co/npm/iobroker.vis-metro.png?downloads=true)](https://nodei.co/npm/iobroker.vis-metro/)
