@@ -1,102 +1,114 @@
 {
-    "common": {
-        "name": "vis-metro",
-        "version": "1.1.2",
-        "news": {
-			"1.1.2": {
-                "en": "Fixed metro-string widget",
-                "de": "Korrigiert metro-string widget",
-                "ru": "Исправлен metro-string widget",
-                "nl": "Vaste metro-string widget",
-                "pt": "Atualizado o widget Metro-string",
-                "fr": "Widget de metro-string fixe"
-			},
-            "1.1.1": {
-                "en": "2 Widgets added\nfix tplMetroTileStateNumber",
-                "de": "2 Widgets hinzugefügt\nfix tplMetroTileStateNumber",
-                "ru": "Добавлено 2 виджета\nИсправлен MetroTileStateNumber"
-            },
-            "1.1.0": {
-                "en": "Support of new concept by vis",
-                "de": "Unterstützung vom neuen vis-Konzept",
-                "ru": "Поддержка нового концепта vis"
-            },
-            "1.0.4": {
-                "en": "fix Metro Widget Heating",
-                "de": "Korrigiert Metro Widget Heating",
-                "ru": "Исправлен виджет Metro Widget Heating"
-            },
-            "1.0.3": {
-                "en": "fix Metro Widget Tile State / val Badge Number",
-                "de": "Korrigiert Widget Tile State / val Badge Number",
-                "ru": "Исправлен виджет Tile State / val Badge Number"
-            },
-            "1.0.1": {
-                "en": "fix Metro Widget Tile Dialog",
-                "de": "Korrigiert Widget Tile Dialog",
-                "ru": "Исправлен виджет навигации"
-            }
-        },
-        "title": "Metro style Widgets for vis",
-        "titleLang": {
-            "en": "Metro style Widgets for vis",
-            "de": "Widgets im Metro-Stil für vis",
-            "ru": "Виджеты в стиле Metro для vis",
-            "pt": "Widgets estilo Metro para vis",
-            "nl": "Metro-stijl Widgets voor vis",
-            "fr": "Widgets de style métro pour vis",
-            "it": "Widget stile metro per vis",
-            "es": "Widgets de estilo Metro para vis",
-            "pl": "Widgety w stylu Metro dla vis",
-            "zh-cn": "用于 vis 的 Metro 风格小部件"
-        },
-        "desc": {
-            "en": "metro Widgets for ioBroker.vis",
-            "de": "metro Widgets für ioBroker.vis",
-            "ru": "metro Widgets для ioBroker.vis"
-        },
-        "platform": "Javascript/Node.js",
-        "loglevel": "info",
-        "icon": "metro.png",
-        "enabled": true,
-        "mode": "once",
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.vis-metro/master/admin/metro.png",
-        "keywords": [
-            "metro",
-            "vis",
-            "GUI",
-            "graphical",
-            "scada"
-        ],
-        "readme": "https://github.com/ioBroker/ioBroker.vis-metro/blob/master/README.md",
-        "authors": [
-            "hobbyquaker <hq@ccu.io>"
-        ],
-        "localLink": "%web_protocol%://%ip%:%web_port%/vis/edit.html",
-        "license": "MIT",
-        "dependencies": [
-            {
-                "vis": ">=0.11.1"
-            }
-        ],
-        "onlyWWW": true,
-        "singleton": true,
-        "type": "visualization-widgets",
-        "restartAdapters": [
-            "vis"
-        ],
-        "connectionType": "none",
-        "dataSource": "none",
-        "noConfig": true,
-        "adminUI": {
-            "config": "none"
-        }
+  "common": {
+    "name": "vis-metro",
+    "version": "1.2.0",
+    "news": {
+      "1.2.0": {
+        "en": "Updated build process",
+        "de": "Build-Prozess aktualisiert",
+        "ru": "Обновленный процесс сборки",
+        "pt": "Processo de compilação atualizado",
+        "nl": "Bijgewerkt bouwproces",
+        "fr": "Processus de construction mis à jour",
+        "it": "Processo di costruzione aggiornato",
+        "es": "Proceso de compilación actualizado",
+        "pl": "Zaktualizowany proces kompilacji",
+        "zh-cn": "更新的构建过程"
+      },
+      "1.1.2": {
+        "en": "Fixed metro-string widget",
+        "de": "Korrigiert metro-string widget",
+        "ru": "Исправлен metro-string widget",
+        "nl": "Vaste metro-string widget",
+        "pt": "Atualizado o widget Metro-string",
+        "fr": "Widget de metro-string fixe"
+      },
+      "1.1.1": {
+        "en": "2 Widgets added\nfix tplMetroTileStateNumber",
+        "de": "2 Widgets hinzugefügt\nfix tplMetroTileStateNumber",
+        "ru": "Добавлено 2 виджета\nИсправлен MetroTileStateNumber"
+      },
+      "1.1.0": {
+        "en": "Support of new concept by vis",
+        "de": "Unterstützung vom neuen vis-Konzept",
+        "ru": "Поддержка нового концепта vis"
+      },
+      "1.0.4": {
+        "en": "fix Metro Widget Heating",
+        "de": "Korrigiert Metro Widget Heating",
+        "ru": "Исправлен виджет Metro Widget Heating"
+      },
+      "1.0.3": {
+        "en": "fix Metro Widget Tile State / val Badge Number",
+        "de": "Korrigiert Widget Tile State / val Badge Number",
+        "ru": "Исправлен виджет Tile State / val Badge Number"
+      },
+      "1.0.1": {
+        "en": "fix Metro Widget Tile Dialog",
+        "de": "Korrigiert Widget Tile Dialog",
+        "ru": "Исправлен виджет навигации"
+      }
     },
-    "native": {
-        "dependencies": [
-            "jqui-mfd",
-            "basic"
-        ]
+    "title": "Metro style Widgets for vis",
+    "titleLang": {
+      "en": "Metro style Widgets for vis",
+      "de": "Widgets im Metro-Stil für vis",
+      "ru": "Виджеты в стиле Metro для vis",
+      "pt": "Widgets estilo Metro para vis",
+      "nl": "Metro-stijl Widgets voor vis",
+      "fr": "Widgets de style métro pour vis",
+      "it": "Widget stile metro per vis",
+      "es": "Widgets de estilo Metro para vis",
+      "pl": "Widgety w stylu Metro dla vis",
+      "zh-cn": "用于 vis 的 Metro 风格小部件"
     },
-    "instanceObjects": []
+    "desc": {
+      "en": "metro Widgets for ioBroker.vis",
+      "de": "metro Widgets für ioBroker.vis",
+      "ru": "metro Widgets для ioBroker.vis"
+    },
+    "platform": "Javascript/Node.js",
+    "loglevel": "info",
+    "icon": "metro.png",
+    "enabled": true,
+    "mode": "once",
+    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.vis-metro/master/admin/metro.png",
+    "keywords": [
+      "metro",
+      "vis",
+      "GUI",
+      "graphical",
+      "scada"
+    ],
+    "readme": "https://github.com/ioBroker/ioBroker.vis-metro/blob/master/README.md",
+    "authors": [
+      "hobbyquaker <hq@ccu.io>"
+    ],
+    "localLink": "%web_protocol%://%ip%:%web_port%/vis/edit.html",
+    "license": "MIT",
+    "dependencies": [
+      {
+        "vis": ">=0.11.1"
+      }
+    ],
+    "onlyWWW": true,
+    "singleton": true,
+    "type": "visualization-widgets",
+    "restartAdapters": [
+      "vis"
+    ],
+    "connectionType": "none",
+    "dataSource": "none",
+    "noConfig": true,
+    "adminUI": {
+      "config": "none"
+    }
+  },
+  "native": {
+    "dependencies": [
+      "jqui-mfd",
+      "basic"
+    ]
+  },
+  "instanceObjects": []
 }

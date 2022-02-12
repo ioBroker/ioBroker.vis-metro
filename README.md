@@ -16,7 +16,7 @@ Build with http://metroui.org.ua/.
     ### __WORK IN PROGRESS__
 -->
 ## Changelog
-### __WORK IN PROGRESS__
+### 1.2.0 (2022-02-12)
 * (bluefox) Updated build process
 
 ### 1.1.2 (2017-12-17)
@@ -33,10 +33,10 @@ Build with http://metroui.org.ua/.
 * (bluefox) fix Metro Widget Heating
 
 ### 1.0.3 (2016-09-21)
-* (bluefox) fix Metro Widget Tile State / val Badge Number 
+* (bluefox) fix Metro Widget Tile State / val Badge Number
 
 ### 1.0.1 (2016-09-13)
-* (bluefox) fix Metro Widget "Tile Dialog" 
+* (bluefox) fix Metro Widget "Tile Dialog"
 
 ### 1.0.0 (2016-03-15)
 * (bluefox) remove configuration dialog
