@@ -37,7 +37,19 @@
                 "ru": "Исправлен виджет навигации"
             }
         },
-        "title": "ioBroker Visualisation - metro style Widgets",
+        "title": "Metro style Widgets for vis",
+        "titleLang": {
+            "en": "Metro style Widgets for vis",
+            "de": "Widgets im Metro-Stil für vis",
+            "ru": "Виджеты в стиле Metro для vis",
+            "pt": "Widgets estilo Metro para vis",
+            "nl": "Metro-stijl Widgets voor vis",
+            "fr": "Widgets de style métro pour vis",
+            "it": "Widget stile metro per vis",
+            "es": "Widgets de estilo Metro para vis",
+            "pl": "Widgety w stylu Metro dla vis",
+            "zh-cn": "用于 vis 的 Metro 风格小部件"
+        },
         "desc": {
             "en": "metro Widgets for ioBroker.vis",
             "de": "metro Widgets für ioBroker.vis",
@@ -73,7 +85,12 @@
         "restartAdapters": [
             "vis"
         ],
-        "noConfig": true
+        "connectionType": "none",
+        "dataSource": "none",
+        "noConfig": true,
+        "adminUI": {
+            "config": "none"
+        }
     },
     "native": {
         "dependencies": [

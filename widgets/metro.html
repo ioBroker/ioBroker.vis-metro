@@ -2,9 +2,9 @@
 
     ioBroker.vis Metro Widget-Set
 
-    version: "1.1.2"
+    version: "1.2.0"
 
-    6'2014-2017 hobbyquaker, bluefox
+    6'2014-2022 hobbyquaker, bluefox
 
     based on http://metroui.org.ua/
 
@@ -212,7 +212,7 @@
     });
 
     vis.binds.metro = {
-        version: "1.1.2",
+        version: "1.2.0",
         format: function (value, type, mustValue) {
             if (!type || type === 'bool') {
 
@@ -449,7 +449,7 @@
 
             if (isNaN(width))  width  = undefined;
             if (isNaN(height)) height = undefined;
-            
+
             level_id   = level_id   || '';
             working_id = working_id || '';
 
@@ -1088,7 +1088,7 @@
                         <%== this.data.attr('badge_src' + vis.binds.metro.format(vis.states.attr(this.data.attr('state_oid') + '.val'))) ? '<img style="position: absolute;' + (this.data.attr('badge_top') ? ('top:' + this.data.attr('badge_top') + '%;') : '') + (this.data.attr('badge_left') ? ('left:' + this.data.attr('badge_left') + '%;') : '') + (this.data.attr('badge_width') ? ('width:' + this.data.attr('badge_width') + '%;') : '') + (this.data.attr('badge_height') ? ('height:' + this.data.attr('badge_height') + '%;') : '') + '" src="' + this.data.attr('badge_src' + vis.binds.metro.format(vis.states.attr(this.data.attr('state_oid') + '.val'))) + '"/>' : '' %><%= (vis.states.attr(this.data.attr("number_oid") + '.val') !== undefined) ? vis.states.attr(this.data.attr("number_oid") + '.val') : '' %>
                     </div>
                 </div>
-            </div> 
+            </div>
             <div <%= (el) -> vis.binds.metro.tile(el, data.transform) %>></div>
         </div>
     </div>
@@ -1116,7 +1116,7 @@
                 var val = parseFloat(str);
                 if (str === true || str === 'true') val = 1;
                 if (isNaN(val)) val = 0;
-                                
+
                 var min = this.data.attr('min');
                 if (min !== undefined && min !== null && min !== '') {
                     min = parseFloat(min);
@@ -1132,7 +1132,7 @@
                 }
 
                 val = (val - min) / (max - min);
-				
+
                 if (val === 1) {
                 %>
                 <img width="90px" src="widgets/metro/img/light_light_dim_100.png"/>
@@ -1202,7 +1202,7 @@
                 var val = parseFloat(str);
                 if (str === true || str === 'true') val = 1;
                 if (isNaN(val)) val = 0;
-                                
+
                 var min = this.data.attr('min');
                 if (min !== undefined && min !== null && min !== '') {
                     min = parseFloat(min);
@@ -1759,8 +1759,8 @@
     </div>
 </script>
 
- 
- 
+
+
 <script id="tplMetroTileToggleNumber"
         type="text/ejs"
         class="vis-tpl"
@@ -1830,7 +1830,7 @@
                 var val = parseFloat(str);
                 if (str === true || str === 'true') val = 1;
                 if (isNaN(val)) val = 0;
-                                
+
                 var min = this.data.attr('min');
                 if (min !== undefined && min !== null && min !== '') {
                     min = parseFloat(min);
@@ -1874,7 +1874,7 @@
                 <img width="90%" src="widgets/metro/img/light_light_dim.png"/>
                 <% } %>
                 </div>
-                
+
 		<div class="brand <%= vis.states.attr(this.data.attr('oid') + '.val') > 0 ? this.data.attr("brand_bg_class_true") : this.data.attr("brand_bg_class_false") %>">
                     <span class="label fg-white"><%= this.data.attr("label") %></span>
                 </div>

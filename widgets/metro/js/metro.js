@@ -1,7 +1,7 @@
 var hasTouch = 'ontouchend' in window, eventTimer;
 var moveDirection = 'undefined', startX, startY, deltaX, deltaY, mouseDown = false;
 
-function addTouchEvents(element){
+function addTouchEvents(element) {
     if (hasTouch) {
         element.addEventListener("touchstart", touch2Mouse, true);
         element.addEventListener("touchmove", touch2Mouse, true);
@@ -9,8 +9,7 @@ function addTouchEvents(element){
     }
 }
 
-function touch2Mouse(e)
-{
+function touch2Mouse(e) {
     var theTouch = e.changedTouches[0];
     var mouseEv;
 
@@ -23,14 +22,14 @@ function touch2Mouse(e)
     }
 
 
-    if (mouseEv == "mousedown") {
+    if (mouseEv === "mousedown") {
         eventTimer = (new Date()).getTime();
         startX = theTouch.clientX;
         startY = theTouch.clientY;
         mouseDown = true;
     }
 
-    if (mouseEv == "mouseup") {
+    if (mouseEv === "mouseup") {
         if ((new Date()).getTime() - eventTimer <= 500) {
             mouseEv = "click";
         } else if ((new Date()).getTime() - eventTimer > 1000) {
@@ -40,7 +39,7 @@ function touch2Mouse(e)
         mouseDown = false;
     }
 
-    if (mouseEv == "mousemove") {
+    if (mouseEv === "mousemove") {
         if (mouseDown) {
             deltaX = theTouch.clientX - startX;
             deltaY = theTouch.clientY - startY;
@@ -48,7 +47,7 @@ function touch2Mouse(e)
         }
     }
 
-    var mouseEvent = document.createEvent("MouseEvent");
+    var mouseEvent = document.createEvent('MouseEvent');
     mouseEvent.initMouseEvent(mouseEv, true, true, window, 1, theTouch.screenX, theTouch.screenY, theTouch.clientX, theTouch.clientY, false, false, false, false, 0, null);
     theTouch.target.dispatchEvent(mouseEvent);
 
@@ -57,12 +56,11 @@ function touch2Mouse(e)
 
 
 (function( $ ) {
-    $.widget("metro.tileTransform", {
+    $.widget('metro.tileTransform', {
 
-        version: "1.1.1",
+        version: "1.2.0",
 
-        options: {
-        },
+        options: {},
 
         _create: function(){
             var element = this.element;
@@ -83,7 +81,7 @@ function touch2Mouse(e)
 
 
                 setTimeout(function ($this) {
-                    $this.addClass("tile-transform-"+transform);
+                    $this.addClass('tile-transform-'+transform);
                 }, 10, $(this));
 
             });
@@ -92,10 +90,10 @@ function touch2Mouse(e)
 
 
                 setTimeout(function ($this) {
-                    $this.removeClass("tile-transform-left")
-                        .removeClass("tile-transform-right")
-                        .removeClass("tile-transform-top")
-                        .removeClass("tile-transform-bottom");
+                    $this.removeClass('tile-transform-left')
+                        .removeClass('tile-transform-right')
+                        .removeClass('tile-transform-top')
+                        .removeClass('tile-transform-bottom');
                 }, 10, $(this));
 
 
@@ -103,10 +101,10 @@ function touch2Mouse(e)
             });
             element.on('mouseleave.metroTransform', function(){
                 $(this)
-                    .removeClass("tile-transform-left")
-                    .removeClass("tile-transform-right")
-                    .removeClass("tile-transform-top")
-                    .removeClass("tile-transform-bottom");
+                    .removeClass('tile-transform-left')
+                    .removeClass('tile-transform-right')
+                    .removeClass('tile-transform-top')
+                    .removeClass('tile-transform-bottom');
             });
         },
 
@@ -442,7 +440,7 @@ function touch2Mouse(e)
  element.addEventListener("touchmove", touch2Mouse, true);
  element.addEventListener("touchend", touch2Mouse, true);
  }*/
- 
+
 
 
     $.widget("metro.metroSlider", {
