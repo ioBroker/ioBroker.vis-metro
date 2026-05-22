@@ -99,7 +99,6 @@
     ],
     "connectionType": "none",
     "dataSource": "none",
-    "noConfig": true,
     "adminUI": {
       "config": "none"
     }
