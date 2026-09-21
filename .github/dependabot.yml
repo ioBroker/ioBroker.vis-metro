@@ -1,27 +1,31 @@
-# Dependabot configuration
-
 version: 2
 updates:
-
-  - package-ecosystem: 'github-actions'
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: github-actions
     directory: '/'
     schedule:
-      interval: 'cron'
-      timezone: 'Europe/Berlin'
-      cronjob: '44 2 15 * *'
-    open-pull-requests-limit: 15
+      interval: monthly
+      time: '04:00'
+      timezone: Europe/Berlin
 
-  - package-ecosystem: 'npm'
-    directories:
-      - '**/*'
+  - package-ecosystem: npm
+    directory: '/'
     schedule:
-      interval: 'cron'
-      timezone: 'Europe/Berlin'
-      cronjob: '44 2 15 * *'
+      interval: monthly
+      time: '04:00'
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+
+  # the vis-2 widget set
+  - package-ecosystem: npm
+    directory: '/src-widgets'
+    schedule:
+      interval: monthly
+      time: '04:00'
+      timezone: Europe/Berlin
     open-pull-requests-limit: 20
-    versioning-strategy: 'increase'
-    cooldown:
-      default-days: 7
+    versioning-strategy: increase
     ignore:
       - dependency-name: '@types/node'
         update-types:
