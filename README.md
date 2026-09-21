@@ -87,7 +87,7 @@ Build with http://metroui.org.ua/.
 * (bluefox) initial checkin
 
 ## License
- Copyright (c) 2013-2022 hobbyquaker https://github.com/hobbyquaker, bluefox https://github.com/GermanBluefox
+ Copyright (c) 2013-2026 hobbyquaker https://github.com/hobbyquaker, bluefox https://github.com/GermanBluefox
  MIT
 
 ### Third-party fonts
