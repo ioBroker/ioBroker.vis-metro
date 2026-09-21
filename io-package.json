@@ -69,10 +69,10 @@
     "platform": "Javascript/Node.js",
     "loglevel": "info",
     "tier": 3,
-    "icon": "metro.png",
+    "icon": "metro.svg",
     "enabled": true,
     "mode": "once",
-    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.vis-metro/master/admin/metro.png",
+    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.vis-metro/master/admin/metro.svg",
     "keywords": [
       "metro",
       "vis",
@@ -98,7 +98,8 @@
     "singleton": true,
     "type": "visualization-widgets",
     "restartAdapters": [
-      "vis"
+      "vis",
+      "vis-2"
     ],
     "connectionType": "none",
     "dataSource": "none",
@@ -112,10 +113,117 @@
         "url": "vis-2-widgets-metro/customWidgets.js",
         "bundlerType": "module",
         "components": [
-          "MetroTileBool"
+          "MetroTileBool",
+          "MetroTileBoolDialog",
+          "MetroTileBoolNumber",
+          "MetroTileString",
+          "MetroTileState",
+          "MetroTileStateNumber",
+          "MetroTileList8",
+          "MetroTileToggle",
+          "MetroTileToggleNumber",
+          "MetroTileNav",
+          "MetroSlider",
+          "MetroSliderVertical",
+          "MetroValueBoolCheckbox",
+          "MetroValueBoolSwitch",
+          "MetroTileDialog",
+          "MetroTileDialogNumber",
+          "MetroTileDialogStatic",
+          "MetroTileStaticDialogNumber",
+          "MetroTileDialogString",
+          "MetroTileStringDialogNumber",
+          "MetroTileFrameDialogNumber",
+          "MetroTileDimmer",
+          "MetroTileDimmerDialog",
+          "MetroTileDimmerDialogactiv",
+          "MetroTileShutter",
+          "MetroTileShutterDialog",
+          "MetroTileHeating",
+          "MetroTileHeatingDialog"
         ]
       }
-    }
+    },
+    "messages": [
+      {
+        "condition": {
+          "operand": "and",
+          "rules": [
+            "!vis",
+            "!vis-2"
+          ]
+        },
+        "title": {
+          "en": "No vis adapter found",
+          "de": "Kein vis-Adapter gefunden",
+          "ru": "Адаптер vis не найден",
+          "pt": "Nenhum adaptador vis encontrado",
+          "nl": "Geen vis-adapter gevonden",
+          "fr": "Aucun adaptateur vis trouvé",
+          "it": "Nessun adattatore vis trovato",
+          "es": "No se encontró ningún adaptador vis",
+          "pl": "Nie znaleziono adaptera vis",
+          "uk": "Адаптер vis не знайдено",
+          "zh-cn": "找不到vis适配器"
+        },
+        "text": {
+          "en": "This adapter requires the vis or vis-2 adapter to be installed and running. Install it, if you want to use this widgets.",
+          "de": "Dieser Adapter benötigt den vis- oder vis-2-Adapter, der installiert und ausgeführt wird. Installieren Sie es, wenn Sie diese Widgets verwenden möchten.",
+          "ru": "Этот адаптер требует установки и запуска адаптера vis или vis-2. Установите его, если хотите использовать эти виджеты.",
+          "pt": "Este adaptador requer que o adaptador vis ou vis-2 seja instalado e executado. Instale-o, se quiser usar esses widgets.",
+          "nl": "Deze adapter vereist dat de vis- of vis-2-adapter is geïnstalleerd en wordt uitgevoerd. Installeer het als u deze widgets wilt gebruiken.",
+          "fr": "Cet adaptateur nécessite que l'adaptateur vis ou vis-2 soit installé et en cours d'exécution. Installez-le si vous souhaitez utiliser ces widgets.",
+          "it": "Questo adattatore richiede che l'adattatore vis o vis-2 sia installato ed in esecuzione. Installalo se vuoi utilizzare questi widget.",
+          "es": "Este adaptador requiere que el adaptador vis o vis-2 esté instalado y en funcionamiento. Instálalo si quieres usar estos widgets.",
+          "pl": "Ten adapter wymaga zainstalowania i uruchomienia adaptera vis lub vis-2. Zainstaluj go, jeśli chcesz używać tych widżetów.",
+          "uk": "Цей адаптер потребує встановлення та запуску адаптера vis або vis-2. Встановіть його, якщо хочете використовувати ці віджети.",
+          "zh-cn": "此适配器需要安装和运行vis或vis-2适配器。如果要使用这些小部件，请安装它。"
+        },
+        "level": "info",
+        "buttons": [
+          "ok",
+          "cancel"
+        ]
+      },
+      {
+        "condition": {
+          "operand": "and",
+          "rules": [
+            "vis-2<2.12.8"
+          ]
+        },
+        "title": {
+          "en": "vis-2 is too old",
+          "de": "vis-2 ist zu alt",
+          "ru": "vis-2 слишком старый",
+          "pt": "vis-2 é demasiado antigo",
+          "nl": "vis-2 is te oud",
+          "fr": "vis-2 est trop ancien",
+          "it": "vis-2 è troppo vecchio",
+          "es": "vis-2 es demasiado antiguo",
+          "pl": "vis-2 jest zbyt stary",
+          "uk": "vis-2 застарий",
+          "zh-cn": "vis-2 版本过旧"
+        },
+        "text": {
+          "en": "The React widgets require vis-2 2.12.8 or newer. With an older vis-2 the widgets of vis-1 are used.",
+          "de": "Die React-Widgets benötigen vis-2 2.12.8 oder neuer. Mit einem älteren vis-2 werden die Widgets von vis-1 verwendet.",
+          "ru": "React-виджеты требуют vis-2 2.12.8 или новее. Со старым vis-2 используются виджеты vis-1.",
+          "pt": "Os widgets React requerem vis-2 2.12.8 ou mais recente. Com um vis-2 mais antigo são usados os widgets do vis-1.",
+          "nl": "De React-widgets vereisen vis-2 2.12.8 of nieuwer. Met een oudere vis-2 worden de vis-1-widgets gebruikt.",
+          "fr": "Les widgets React nécessitent vis-2 2.12.8 ou plus récent. Avec un vis-2 plus ancien, les widgets de vis-1 sont utilisés.",
+          "it": "I widget React richiedono vis-2 2.12.8 o successivo. Con un vis-2 più vecchio vengono usati i widget di vis-1.",
+          "es": "Los widgets de React requieren vis-2 2.12.8 o superior. Con un vis-2 más antiguo se usan los widgets de vis-1.",
+          "pl": "Widgety React wymagają vis-2 2.12.8 lub nowszego. Ze starszym vis-2 używane są widgety vis-1.",
+          "uk": "React-віджети потребують vis-2 2.12.8 або новіше. Зі старішим vis-2 використовуються віджети vis-1.",
+          "zh-cn": "React 小部件需要 vis-2 2.12.8 或更高版本。使用较旧的 vis-2 时将使用 vis-1 的小部件。"
+        },
+        "level": "warn",
+        "buttons": [
+          "ok"
+        ]
+      }
+    ]
   },
   "native": {
     "dependencies": [

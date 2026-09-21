@@ -1,6 +1,5 @@
 /node_modules
 /.idea
-/package-lock.json
 /src-widgets/node_modules
 /src-widgets/build
 /src-widgets/.__mf__temp
@@ -8,3 +7,4 @@
 /src-widgets/preview/.vite
 /src-widgets/preview/dist
 /src-widgets/preview/.diff
+/src-widgets/.check

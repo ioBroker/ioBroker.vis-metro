@@ -56,11 +56,14 @@
     "tsc": "cd src-widgets && npx tsc",
     "preview": "cd src-widgets && npm run preview",
     "preview:diff": "cd src-widgets && node preview/diff.mjs",
+    "preview:images": "cd src-widgets && node preview/images.mjs",
+    "check-widgets": "cd src-widgets && node tools/checkWidgets.mjs",
     "palette": "cd src-widgets && node tools/generate.mjs",
     "palette:verify": "cd src-widgets && node tools/generate.mjs --verify",
     "icons": "cd src-widgets && node tools/extractIcons.mjs",
     "lint": "eslint -c eslint.config.mjs",
     "test": "mocha --exit",
+    "test:integration": "mocha --exit",
     "test:package": "mocha test/testPackageFiles --exit",
     "npm": "npm i && cd src-widgets && npm i",
     "update-packages": "npx -y npm-check-updates --upgrade && cd src-widgets && npx -y npm-check-updates --upgrade",
@@ -69,8 +72,5 @@
     "release-minor": "release-script minor --yes --no-update-lockfile",
     "release-major": "release-script major --yes --no-update-lockfile"
   },
-  "license": "MIT",
-  "dependencies": {
-    "@iobroker/adapter-core": "^1.0.3"
-  }
+  "license": "MIT"
 }

@@ -14,6 +14,8 @@ import path from 'node:path';
 const here = path.dirname(fileURLToPath(import.meta.url));
 
 const TYPES: Record<string, string> = {
+    '.js': 'text/javascript',
+    '.html': 'text/html',
     '.css': 'text/css',
     '.png': 'image/png',
     '.svg': 'image/svg+xml',
@@ -27,8 +29,9 @@ const TYPES: Record<string, string> = {
  * Serves the two widget sets under the paths vis uses, so nothing has to be built first:
  *
  *   /widgets/vis-2-widgets-metro/...  -> src-widgets/public/   (metro-iconFont.css, the fonts, the previews)
- *   /widgets/...                      -> widgets/              (the vis-1 set: metro-bootstrap.css,
- *                                                               iconFont.min.css, the mfd images)
+ *   /widgets/...                      -> widgets/              (the vis-1 set: metro.html, metro.js,
+ *                                                               the stylesheets, the mfd images)
+ *   /legacy/jquery.js, jquery-ui.js, can.js, basic-binds.js    (the vis-1 runtime, see preview/vis1.ts)
  *
  * `Generic.linkIconFont()` links `widgets/vis-2-widgets-metro/styles/metro-iconFont.css` relative to the page,
  * and the stylesheets load their fonts with `../fonts/...` - both resolve through this.
@@ -38,11 +41,23 @@ function widgetFiles(): any {
         ['/widgets/vis-2-widgets-metro/', path.join(here, '..', 'public')],
         ['/widgets/', path.join(here, '..', '..', 'widgets')],
     ];
+    // the vis-1 runtime for preview/vis1.ts - single files, so they load as classic scripts, not as modules
+    const files: Record<string, string> = {
+        '/legacy/jquery.js': path.join(here, '..', 'node_modules', 'jquery', 'dist', 'jquery.js'),
+        '/legacy/jquery-ui.js': path.join(here, '..', 'node_modules', 'jquery-ui', 'dist', 'jquery-ui.js'),
+        '/legacy/can.js': path.join(here, 'vendor', 'can.custom.min.js'),
+        '/legacy/basic-binds.js': path.join(here, 'vendor', 'basic-binds.js'),
+    };
     return {
         name: 'widget-files',
         configureServer(server: any): void {
             server.middlewares.use((req: any, res: any, next: () => void): void => {
                 const url = decodeURIComponent((req.url || '').split('?')[0]);
+                if (files[url]) {
+                    res.setHeader('Content-Type', 'text/javascript');
+                    fs.createReadStream(files[url]).pipe(res);
+                    return;
+                }
                 for (const [prefix, dir] of roots) {
                     if (!url.startsWith(prefix)) {
                         continue;

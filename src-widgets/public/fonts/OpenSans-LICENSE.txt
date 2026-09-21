@@ -1,10 +1,10 @@
-Open Sans Regular, Version 1.10
+Open Sans Regular, Light and Bold, Version 1.10
 Digitized data copyright (c) 2010-2011, Google Corporation.
 Open Sans is a trademark of Google and may be registered in certain jurisdictions.
 
-Shipped unmodified as assets/OpenSans-Regular-<hash>.woff. It is the file the vis-1 widget set loads from
-https://themes.googleusercontent.com/static/fonts/opensans/v6/K88pR3goAWT7BTt32Z01mz8E0i7KZn-EPnyo3HZu7kw.woff
-on devices without Segoe UI; the vis-2 widgets use this local copy instead.
+OpenSans-Regular.woff, OpenSans-Light.woff and OpenSans-Bold.woff are shipped unmodified. They are the files
+the vis-1 widget set loaded from themes.googleusercontent.com/static/fonts/opensans/v6/, on devices
+without Segoe UI.
 
 Licensed under the Apache License, Version 2.0:
 

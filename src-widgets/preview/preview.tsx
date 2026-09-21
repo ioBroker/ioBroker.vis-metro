@@ -13,12 +13,17 @@ import React, { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { createRoot } from 'react-dom/client';
 
 // puts the stub of `window.visRxWidget` in place - before the widgets are imported below
-import { legacy, withDefaults } from './stub';
+import { withDefaults } from './stub';
+import { actions as vis1Actions, loadVis1, renderVis1Widget } from './vis1';
 import { FIXTURES, type Scope } from './fixtures';
+import { CASES } from './cases';
+import { IMAGES } from './imageSamples';
 import { COLORS, RIBBED } from '../tools/palette.mjs';
 import iconCss from '../public/styles/metro-iconFont.css?raw';
 import openSansUrl from '../src/styles/fonts/OpenSans-Regular.woff?url';
 import ptSerifUrl from '../src/styles/fonts/PTSerifCaption-Regular.woff?url';
+import openSansLightUrl from '../src/styles/fonts/OpenSans-Light.woff?url';
+import openSansBoldUrl from '../src/styles/fonts/OpenSans-Bold.woff?url';
 
 const ERROR_STYLE =
     'margin:24px;padding:16px;background:#fde7e9;color:#8b1a1a;border-radius:8px;white-space:pre-wrap;font:13px/1.5 monospace';
@@ -39,10 +44,42 @@ function fail(what: string, error: unknown): never {
 }
 
 // The widgets extend `window.visRxWidget`, so they may only be imported after the stub is in place
-const [{ default: MetroTileBool }] = await Promise.all([import('../src/MetroTileBool')]).catch(e =>
-    fail('The widgets could not be loaded.', e),
+const MODULES = await Promise.all([
+    import('../src/MetroTileBool'),
+    import('../src/MetroTileString'),
+    import('../src/MetroTileBoolNumber'),
+    import('../src/MetroTileState'),
+    import('../src/MetroTileStateNumber'),
+    import('../src/MetroTileList8'),
+    import('../src/MetroTileToggle'),
+    import('../src/MetroTileToggleNumber'),
+    import('../src/MetroTileNav'),
+    import('../src/MetroSlider'),
+    import('../src/MetroSliderVertical'),
+    import('../src/MetroValueBoolCheckbox'),
+    import('../src/MetroValueBoolSwitch'),
+    import('../src/MetroTileBoolDialog'),
+    import('../src/MetroTileDialogStatic'),
+    import('../src/MetroTileStaticDialogNumber'),
+    import('../src/MetroTileDialogString'),
+    import('../src/MetroTileStringDialogNumber'),
+    import('../src/MetroTileDialog'),
+    import('../src/MetroTileDialogNumber'),
+    import('../src/MetroTileFrameDialogNumber'),
+    import('../src/MetroTileDimmer'),
+    import('../src/MetroTileDimmerDialog'),
+    import('../src/MetroTileDimmerDialogactiv'),
+    import('../src/MetroTileShutter'),
+    import('../src/MetroTileShutterDialog'),
+    import('../src/MetroTileHeating'),
+    import('../src/MetroTileHeatingDialog'),
+]).catch(e => fail('The widgets could not be loaded.', e));
+
+/** tpl id -> React widget */
+const WIDGETS: Record<string, any> = Object.fromEntries(
+    MODULES.map(module => [module.default.getWidgetInfo().id, module.default]),
 );
-const LegacyTileBool = legacy(MetroTileBool);
+const MetroTileBool = WIDGETS.tplMetroTileBool;
 
 // ------------------------------------------------------------------------------------------------ class lists
 
@@ -174,9 +211,52 @@ function ClassPicker(props: {
 
 // ------------------------------------------------------------------------------------------------ comparison
 
-/** The box vis puts around a widget: the size of the widget plus the 3px padding of the vis-1 templates */
-function WidgetBox(props: { size: number; children: React.ReactNode }): React.JSX.Element {
-    return <div style={{ width: props.size, height: props.size, padding: 3, position: 'relative' }}>{props.children}</div>;
+/**
+ * The box vis-2 gives a React widget: the size of the widget, `border-box` (visBaseWidget.tsx), and the class
+ * `vis-widget` (visRxWidget.tsx), which clips like the box of an EJS widget.
+ */
+function VisBox(props: { width: number; height: number; children: React.ReactNode }): React.JSX.Element {
+    return (
+        <div
+            className="vis-widget"
+            style={{ position: 'relative', width: props.width, height: props.height, boxSizing: 'border-box' }}
+        >
+            {props.children}
+        </div>
+    );
+}
+
+/**
+ * The real vis-1 template of a widget, rendered by the vis-1 runtime of preview/vis1.ts. Rendered anew on every
+ * change - the EJS templates bind to `vis.states` themselves, but a fresh render keeps the preview simple.
+ */
+function Vis1Widget(props: {
+    tpl: string;
+    data: Record<string, any>;
+    values: Record<string, any>;
+    width: number;
+    height: number;
+}): React.JSX.Element {
+    const ref = React.useRef<HTMLDivElement>(null);
+    const key = JSON.stringify([props.tpl, props.data, props.values, props.width, props.height]);
+    useEffect(() => {
+        let cancelled = false;
+        void loadVis1().then(() => {
+            if (!cancelled && ref.current) {
+                renderVis1Widget(ref.current, props.tpl, props.data, props.values, props);
+            }
+        });
+        return () => {
+            cancelled = true;
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [key]);
+    return (
+        <div
+            ref={ref}
+            style={{ width: props.width, height: props.height }}
+        />
+    );
 }
 
 /**
@@ -323,17 +403,21 @@ type IconTarget = 'icon_class_false' | 'icon_class_true' | 'icon_badge_false' | 
  * the page, every other parameter is an attribute of the widget.
  */
 const PARAMS = new URLSearchParams(window.location.search);
-const PAGE_PARAMS = ['dark', 'edit', 'size', 'image', 'nudge', 'scope', 'bundledfonts'];
+const PAGE_PARAMS = ['dark', 'edit', 'size', 'image', 'nudge', 'scope', 'bundledfonts', 'images'];
 
 /**
  * The faces `?bundledfonts=1` points at the shipped files: each vis-1 family at its copy in widgets/metro/fonts/,
  * each vis-2 family at its copy in src/styles/fonts/.
  */
-const BUNDLED_FACES: [family: string, url: string][] = [
-    ['Open Sans', '/widgets/metro/fonts/OpenSans-Regular.woff'],
-    ['PT Serif Caption', '/widgets/metro/fonts/PTSerifCaption-Regular.woff'],
-    ['vis-metro-sans', openSansUrl],
-    ['vis-metro-serif', ptSerifUrl],
+const BUNDLED_FACES: [family: string, weight: number, url: string][] = [
+    ['Open Sans', 400, '/widgets/metro/fonts/OpenSans-Regular.woff'],
+    ['Open Sans Light', 300, '/widgets/metro/fonts/OpenSans-Light.woff'],
+    ['Open Sans Bold', 700, '/widgets/metro/fonts/OpenSans-Bold.woff'],
+    ['PT Serif Caption', 400, '/widgets/metro/fonts/PTSerifCaption-Regular.woff'],
+    ['vis-metro-sans', 400, openSansUrl],
+    ['vis-metro-sans-light', 300, openSansLightUrl],
+    ['vis-metro-sans-bold', 700, openSansBoldUrl],
+    ['vis-metro-serif', 400, ptSerifUrl],
 ];
 
 /**
@@ -350,7 +434,8 @@ function useBundledFonts(on: boolean): void {
         }
         const style = document.createElement('style');
         style.textContent = BUNDLED_FACES.map(
-            ([family, url]) => `@font-face { font-family: '${family}'; font-weight: 400; src: url('${url}') format('woff'); }`,
+            ([family, weight, url]) =>
+                `@font-face { font-family: '${family}'; font-weight: ${weight}; src: url('${url}') format('woff'); }`,
         ).join('\n');
         // last in the head, so these faces win over the ones of both stylesheets
         document.head.appendChild(style);
@@ -387,6 +472,9 @@ function App(): React.JSX.Element {
         () => ({
             setValue: (): void => {},
             socket: {},
+            // the vis-1 stub has the same view active, see preview/vis1.ts
+            activeView: 'preview',
+            changeView: (): void => {},
             // vis-2 passes the theme through the context - that is what `getRootClass()` reads
             themeType: dark ? 'dark' : 'light',
         }),
@@ -403,7 +491,6 @@ function App(): React.JSX.Element {
     );
 
     const common = { context, editMode, view: 'view', id: 'w1', refParent: { current: null } };
-    const valuesFor = (value: boolean): Record<string, any> => ({ 'test.0.bool.val': value, 'test.0.bool.ack': true });
 
     const colorOptions = [...BG_CLASSES, ...RIBBED_CLASSES];
     const shownIcons = ICON_CLASSES.filter(name => name.includes(iconFilter.trim().toLowerCase()));
@@ -552,33 +639,105 @@ function App(): React.JSX.Element {
                 <div style={panel}>
                     <b style={{ fontSize: 13 }}>Tile Bool</b> <code style={{ fontSize: 11, opacity: 0.55 }}>tplMetroTileBool</code>
                     <div style={{ fontSize: 11, opacity: 0.65, margin: '4px 0 14px' }}>
-                        Same DOM in all three columns. Left: the vis-1 scope <code>.metro</code> with
-                        metro-bootstrap.css. Middle: the vis-2 scope <code>.metro-rx</code> with metro-core.css and
-                        metro-palette.css. Right: both on top of each other - black where they agree.
+                        Left: the vis-1 template of widgets/metro.html, rendered by the vis-1 runtime and embedded the
+                        way vis-2 embeds an EJS widget. Middle: the React widget in the box vis-2 gives it. Right: both
+                        on top of each other - black where they agree.
                     </div>
-                    <CompareGrid columns={size + 6}>
+                    <CompareGrid columns={size}>
                         {[false, true].map(value => {
-                            const props = { ...common, values: valuesFor(value), rxData };
+                            // every row its own object id: the states of the vis-1 runtime are global
+                            const oid = `preview.bool_${value}`;
+                            const values = { [`${oid}.val`]: value, [`${oid}.ack`]: true };
+                            const data = { ...rxData, oid };
                             return (
                                 <Compare
                                     key={String(value)}
                                     name={`tile-bool-${value}`}
                                     label={<code>{String(value)}</code>}
-                                    width={size + 6}
-                                    height={size + 6}
-                                    render={scope => (
-                                        <WidgetBox size={size}>
-                                            {scope === 'metro-rx' ? (
-                                                <MetroTileBool {...props} />
-                                            ) : (
-                                                <LegacyTileBool {...props} />
-                                            )}
-                                        </WidgetBox>
-                                    )}
+                                    width={size}
+                                    height={size}
+                                    render={scope =>
+                                        scope === 'metro-rx' ? (
+                                            <VisBox
+                                                width={size}
+                                                height={size}
+                                            >
+                                                <MetroTileBool
+                                                    {...common}
+                                                    values={values}
+                                                    rxData={data}
+                                                />
+                                            </VisBox>
+                                        ) : (
+                                            <Vis1Widget
+                                                tpl="tplMetroTileBool"
+                                                data={data}
+                                                values={values}
+                                                width={size}
+                                                height={size}
+                                            />
+                                        )
+                                    }
                                 />
                             );
                         })}
                     </CompareGrid>
+                </div>
+
+                {/* ------------------------------------------------------------------ widgets */}
+                <div style={panel}>
+                    <b style={{ fontSize: 13 }}>Widgets</b>
+                    <div style={{ fontSize: 11, opacity: 0.65, margin: '4px 0 14px' }}>
+                        Every React widget against its vis-1 template, with the attributes and states of
+                        preview/cases.tsx - the corners of the templates, where a port goes wrong.
+                    </div>
+                    {CASES.map(item => {
+                        const Widget = WIDGETS[item.tpl];
+                        if (!Widget) {
+                            return null;
+                        }
+                        const data = withDefaults(Widget, item.data);
+                        return (
+                            <div
+                                key={item.name}
+                                style={{ marginBottom: 12 }}
+                            >
+                                <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>
+                                    {item.name} <code style={{ fontWeight: 400, opacity: 0.55 }}>{item.tpl}</code>
+                                </div>
+                                <CompareGrid columns={item.width}>
+                                    <Compare
+                                        name={item.name}
+                                        label=""
+                                        width={item.width}
+                                        height={item.height}
+                                        render={scope =>
+                                            scope === 'metro-rx' ? (
+                                                <VisBox
+                                                    width={item.width}
+                                                    height={item.height}
+                                                >
+                                                    <Widget
+                                                        {...common}
+                                                        values={item.values}
+                                                        rxData={data}
+                                                    />
+                                                </VisBox>
+                                            ) : (
+                                                <Vis1Widget
+                                                    tpl={item.tpl}
+                                                    data={data}
+                                                    values={item.values}
+                                                    width={item.width}
+                                                    height={item.height}
+                                                />
+                                            )
+                                        }
+                                    />
+                                </CompareGrid>
+                            </div>
+                        );
+                    })}
                 </div>
 
                 {/* ------------------------------------------------------------------ fixtures */}
@@ -760,9 +919,198 @@ class Boundary extends React.Component<{ children: React.ReactNode }, { error: E
     }
 }
 
+/**
+ * `?dialog=<case>`: only that dialog tile, at the top left, clicked open - in the scope of `?scope=`. The dialog
+ * sits in the middle of the window, so preview/diff.mjs compares the whole window of the two loads.
+ */
+const DIALOG_CASE = CASES.find(item => item.name === new URLSearchParams(window.location.search).get('dialog'));
+
+function DialogPage(props: { item: (typeof CASES)[number] }): React.JSX.Element {
+    const { item } = props;
+    const Widget = WIDGETS[item.tpl];
+    const data = withDefaults(Widget, item.data);
+    const context = { setValue: (): void => {}, socket: {}, themeType: 'light', activeView: 'preview', changeView: (): void => {} };
+    return (
+        <div
+            data-dialog-host
+            data-side="current"
+            style={{ position: 'absolute', left: 20, top: 20, width: item.width, height: item.height }}
+        >
+            {(FORCED_SCOPE || 'metro-rx') === 'metro-rx' ? (
+                <VisBox
+                    width={item.width}
+                    height={item.height}
+                >
+                    <Widget
+                        context={context}
+                        view="view"
+                        id="w1"
+                        refParent={{ current: null }}
+                        values={item.values}
+                        rxData={data}
+                    />
+                </VisBox>
+            ) : (
+                <Vis1Widget
+                    tpl={item.tpl}
+                    data={data}
+                    values={item.values}
+                    width={item.width}
+                    height={item.height}
+                />
+            )}
+        </div>
+    );
+}
+
+(window as any).__dialogCases = CASES.filter(item => item.dialog).map(item => item.name);
+
+/**
+ * `?click=<case>`: only that widget, at the top left, with live values - what it writes comes back to it, as in a
+ * running vis. preview/diff.mjs clicks it and reads `window.__clickLog()`: the writes, URL calls and view changes,
+ * of the vis-1 template (the original binds of basic.html, see preview/vis1.ts) or of the React widget.
+ */
+const CLICK_CASE = CASES.find(item => item.name === new URLSearchParams(window.location.search).get('click'));
+
+/** What the React widget did, in the form of `actions` of preview/vis1.ts */
+const reactActions: unknown[][] = [];
+
+function ClickPage(props: { item: (typeof CASES)[number] }): React.JSX.Element {
+    const { item } = props;
+    const Widget = WIDGETS[item.tpl];
+    const data = useMemo(() => withDefaults(Widget, item.data), [Widget, item.data]);
+    const [values, setValues] = useState<Record<string, any>>(item.values);
+    const context = useMemo(
+        () => ({
+            setValue: (id: string, value: unknown): void => {
+                reactActions.push(['setValue', id, value]);
+                setValues(old => ({ ...old, [`${id}.val`]: value }));
+            },
+            changeView: (view: string): void => {
+                reactActions.push(['changeView', view]);
+            },
+            socket: {},
+            themeType: 'light',
+            activeView: 'preview',
+        }),
+        [],
+    );
+    useEffect(() => {
+        // ToggleWidget calls its URLs with fetch() - the call is what counts, not the answer. Only the calls of the
+        // widget: the vis-1 runtime loads metro.html with fetch() as well.
+        const original = window.fetch;
+        window.fetch = (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+            if (init?.mode !== 'no-cors') {
+                return original(input, init);
+            }
+            reactActions.push(['httpGet', String(input)]);
+            return Promise.resolve(new Response(''));
+        };
+        return () => {
+            window.fetch = original;
+        };
+    }, []);
+    return (
+        <div
+            data-click-host
+            data-side="current"
+            style={{ position: 'absolute', left: 20, top: 20, width: item.width, height: item.height }}
+        >
+            {(FORCED_SCOPE || 'metro-rx') === 'metro-rx' ? (
+                <VisBox
+                    width={item.width}
+                    height={item.height}
+                >
+                    <Widget
+                        context={context}
+                        view="view"
+                        id="w1"
+                        refParent={{ current: null }}
+                        values={values}
+                        rxData={data}
+                    />
+                </VisBox>
+            ) : (
+                <Vis1Widget
+                    tpl={item.tpl}
+                    data={data}
+                    values={item.values}
+                    width={item.width}
+                    height={item.height}
+                />
+            )}
+        </div>
+    );
+}
+
+(window as any).__clickCases = CASES.filter(item => item.clicks).map(item => ({ name: item.name, clicks: item.clicks }));
+(window as any).__clickLog = (): string =>
+    JSON.stringify((FORCED_SCOPE || 'metro-rx') === 'metro-rx' ? reactActions : vis1Actions);
+
+/**
+ * `?images=1`: every widget once, as the picture in the widget palette of vis-2 shows it (preview/imageSamples.tsx) - on
+ * a transparent page, so preview/images.mjs can cut out each `[data-image]` as it is.
+ */
+const IMAGES_PAGE = flag('images');
+
+function ImagesPage(): React.JSX.Element {
+    useEffect(() => {
+        document.documentElement.style.background = 'transparent';
+        document.body.style.background = 'transparent';
+    }, []);
+    const context = { setValue: (): void => {}, socket: {}, themeType: 'light', activeView: 'preview', changeView: (): void => {} };
+    return (
+        <div
+            data-images
+            style={{ display: 'flex', flexWrap: 'wrap', gap: 16, padding: 16, alignItems: 'flex-start', width: 1200 }}
+        >
+            {Object.keys(WIDGETS).map(tpl => {
+                const Widget = WIDGETS[tpl];
+                const sample = IMAGES[tpl] || { data: {}, values: {} };
+                const size = Widget.getWidgetInfo().visDefaultStyle;
+                const width = sample.width || size.width;
+                const height = sample.height || size.height;
+                return (
+                    <div
+                        key={tpl}
+                        data-image={tpl}
+                        // the page font and the clipping of vis-2, as around every rendering of the comparison
+                        data-side="current"
+                        style={{ width, height }}
+                    >
+                        <VisBox
+                            width={width}
+                            height={height}
+                        >
+                            <Widget
+                                context={context}
+                                view="view"
+                                id={`image_${tpl}`}
+                                refParent={{ current: null }}
+                                values={sample.values}
+                                rxData={withDefaults(Widget, sample.data)}
+                            />
+                        </VisBox>
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
+
+(window as any).__imageWidgets = IMAGES_PAGE ? Object.keys(WIDGETS) : [];
+
 createRoot(document.getElementById('root')!).render(
     <Boundary>
-        <App />
+        {IMAGES_PAGE ? (
+            <ImagesPage />
+        ) : CLICK_CASE ? (
+            <ClickPage item={CLICK_CASE} />
+        ) : DIALOG_CASE ? (
+            <DialogPage item={DIALOG_CASE} />
+        ) : (
+            <App />
+        )}
     </Boundary>,
 );
 
@@ -774,6 +1122,15 @@ async function markReady(): Promise<void> {
     const frame = (): Promise<void> => new Promise(resolve => requestAnimationFrame(() => resolve()));
     await frame();
     await frame();
+    // the vis-1 widgets render once the vis-1 runtime is there; metro.js places the slider markers in a
+    // setTimeout and marks the navigation tiles after 100ms
+    await loadVis1();
+    await new Promise(resolve => setTimeout(resolve, 300));
+    if (DIALOG_CASE) {
+        // the click handler of a dialog tile sits on the body of the widget, in vis-1 and here
+        document.querySelector<HTMLElement>('[data-dialog-host] .metro, [data-dialog-host] .metro-rx')?.click();
+        await new Promise(resolve => setTimeout(resolve, 300));
+    }
     await Promise.all(
         [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')].map(link =>
             link.sheet ? null : new Promise(resolve => link.addEventListener('load', resolve, { once: true })),

@@ -6,6 +6,8 @@
  */
 import React from 'react';
 
+import en from '../src/i18n/en.json';
+
 class VisRxWidgetStub extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -40,8 +42,9 @@ class VisRxWidgetStub extends React.Component<any, any> {
         return '';
     }
 
+    /** vis-2 looks the key up with the i18n prefix of the widget set; here it is English, as vis-1 shows it */
     static t(key: string): string {
-        return key;
+        return (en as Record<string, string>)[key.replace(/^vis_metro_/, '')] ?? key;
     }
 
     componentDidMount(): void {}
@@ -51,6 +54,11 @@ class VisRxWidgetStub extends React.Component<any, any> {
     componentDidUpdate(_prevProps: any, _prevState: any): void {}
 
     renderWidgetBody(_props: any): any {
+        return null;
+    }
+
+    /** vis-2 renders the view here; the preview has no views, and neither has its vis-1 runtime */
+    getWidgetView(_view: string): any {
         return null;
     }
 
@@ -73,20 +81,4 @@ export function withDefaults(Widget: any, data: Record<string, any>): Record<str
         }
     }
     return { ...result, ...data };
-}
-
-/**
- * The same widget, rendered under the vis-1 scope.
- *
- * The React widgets reproduce the DOM of the vis-1 templates class for class, only the root is `metro-rx`
- * instead of `metro`. Swapping the root back makes the ORIGINAL metro-bootstrap.css style it - so the left
- * column of the comparison is what vis-1 showed, and every difference to the right column is a difference of
- * the stylesheets, not of the markup.
- */
-export function legacy<T extends new (...args: any[]) => any>(Widget: T): T {
-    return class extends Widget {
-        getRootClass(): string {
-            return 'metro';
-        }
-    };
 }

@@ -4,6 +4,7 @@
  *     npm run preview:diff                   (all scenarios)
  *     npm run preview:diff -- dialog switch  (only comparisons whose name contains one of the words)
  *     npm run preview:diff -- --save         (also write both crops of every difference to preview/.diff/)
+ *     npm run preview:diff -- --save-all     (write both crops of every comparison, to look at them)
  *
  * Starts the preview dev server on a port of its own and opens every scenario twice in a headless Chrome: once
  * with `?scope=metro` (everything styled by the original metro-bootstrap.css) and once with `?scope=metro-rx`
@@ -12,22 +13,26 @@
  * rasterizes a large glyph slightly differently depending on where on the page it sits. Elements marked
  * `data-force="hover|active|focus"` get that pseudo class forced first.
  *
+ * The dialog tiles are also clicked open and the whole window is compared, and the cases with `clicks` (see
+ * preview/cases.tsx) are clicked in both scopes: what the vis-1 template does with the original binds of basic.html
+ * and what the React widget does must be the same, write by write.
+ *
  * The first scenario loads the vis-1 scope twice. It has to come out identical, otherwise the run is not
  * deterministic and the other numbers mean nothing.
  *
  * Exit code 1 as soon as one pixel differs - so it can guard every change of metro-core.css.
  *
- * - A local Chrome or Edge is needed; `CHROME` overrides the path of the executable.
- * - Talks to Chrome over the DevTools protocol with the WebSocket built into node 22 - no puppeteer, and the PNG
- *   decoder below is enough for what Chrome writes (8 bit, RGB or RGBA, not interlaced).
+ * - A local Chrome or Edge is needed; `CHROME` overrides the path of the executable (see browser.mjs).
+ * - `PROBE='<js expression>'` evaluates the expression on every dialog page and prints the result - to find out
+ *   where a difference comes from.
+ * - The PNG decoder below is enough for what Chrome writes (8 bit, RGB or RGBA, not interlaced).
  */
-import { spawn } from 'node:child_process';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import zlib from 'node:zlib';
-import { createServer } from 'vite';
+
+import { startBrowser, waitFor } from './browser.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const PORT = 4176;
@@ -47,75 +52,10 @@ const SCENARIOS = [
     { name: 'fonts', query: 'bundledfonts=1' },
 ];
 
-const SAVE = process.argv.includes('--save');
+const SAVE_ALL = process.argv.includes('--save-all');
+const SAVE = SAVE_ALL || process.argv.includes('--save');
 const only = process.argv.slice(2).filter(arg => !arg.startsWith('--'));
 const SAVE_DIR = path.join(here, '.diff');
-
-function findChrome() {
-    const candidates = [
-        process.env.CHROME,
-        'C:/Program Files/Google/Chrome/Application/chrome.exe',
-        'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
-        'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
-        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-        '/usr/bin/google-chrome',
-        '/usr/bin/chromium',
-        '/usr/bin/chromium-browser',
-    ];
-    const found = candidates.find(file => file && fs.existsSync(file));
-    if (!found) {
-        throw new Error('No Chrome found - set CHROME to the path of the browser executable');
-    }
-    return found;
-}
-
-/** Just enough of a DevTools protocol client: send a command, get its result */
-async function connect(url) {
-    const ws = new WebSocket(url);
-    await new Promise((resolve, reject) => {
-        ws.onopen = resolve;
-        ws.onerror = reject;
-    });
-    let lastId = 0;
-    const pending = new Map();
-    ws.onmessage = event => {
-        const message = JSON.parse(event.data);
-        const callbacks = message.id ? pending.get(message.id) : null;
-        if (callbacks) {
-            pending.delete(message.id);
-            if (message.error) {
-                callbacks.reject(new Error(message.error.message));
-            } else {
-                callbacks.resolve(message.result);
-            }
-        }
-    };
-    return {
-        send: (method, params = {}) =>
-            new Promise((resolve, reject) => {
-                const id = ++lastId;
-                pending.set(id, { resolve, reject });
-                ws.send(JSON.stringify({ id, method, params }));
-            }),
-        close: () => ws.close(),
-    };
-}
-
-async function waitFor(what, timeout, check) {
-    const end = Date.now() + timeout;
-    while (Date.now() < end) {
-        try {
-            const result = await check();
-            if (result) {
-                return result;
-            }
-        } catch {
-            // not there yet
-        }
-        await new Promise(resolve => setTimeout(resolve, 200));
-    }
-    throw new Error(`Timeout while waiting for ${what}`);
-}
 
 /** Decodes the PNGs Chrome produces into RGBA bytes */
 function decodePng(buffer) {
@@ -215,48 +155,14 @@ function compare(a, b) {
     return { count, note: count ? `max delta ${maxDelta}, in x ${minX}-${maxX}, y ${minY}-${maxY}` : '' };
 }
 
-const server = await createServer({
-    configFile: path.join(here, 'vite.config.mts'),
-    server: { port: PORT, strictPort: true },
-    // Not the cache of a running `npm run preview`: two dev servers must not share their optimized dependencies
-    cacheDir: path.join(here, '.vite', 'diff'),
-    logLevel: 'warn',
-});
-await server.listen();
-
-const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'metro-diff-'));
-const chrome = spawn(
-    findChrome(),
-    [
-        '--headless',
-        `--remote-debugging-port=${DEBUG_PORT}`,
-        `--user-data-dir=${profile}`,
-        '--no-first-run',
-        '--no-default-browser-check',
-        '--hide-scrollbars',
-        // the same font rendering for both halves is the point - no GPU raster differences between runs
-        '--disable-gpu',
-        '--force-color-profile=srgb',
-        'about:blank',
-    ],
-    { stdio: 'ignore' },
-);
+const { cdp, evaluate, stop } = await startBrowser({ name: 'diff', port: PORT, debugPort: DEBUG_PORT, viewport: VIEWPORT });
 
 let differing = 0;
 let nondeterministic = false;
 let failed = false;
 try {
-    const target = await waitFor('Chrome', 20000, async () => {
-        const targets = await (await fetch(`http://127.0.0.1:${DEBUG_PORT}/json/list`)).json();
-        return targets.find(item => item.type === 'page');
-    });
-    const cdp = await connect(target.webSocketDebuggerUrl);
-    await cdp.send('Emulation.setDeviceMetricsOverride', { ...VIEWPORT, deviceScaleFactor: 1, mobile: false });
     await cdp.send('DOM.enable');
     await cdp.send('CSS.enable');
-
-    const evaluate = async expression =>
-        (await cdp.send('Runtime.evaluate', { expression, returnByValue: true })).result.value;
 
     const shoot = async box => {
         const { data } = await cdp.send('Page.captureScreenshot', {
@@ -325,16 +231,102 @@ try {
                 if (scenario.selfTest) {
                     nondeterministic = true;
                 }
-                if (SAVE && currentShot) {
-                    fs.mkdirSync(SAVE_DIR, { recursive: true });
-                    fs.writeFileSync(path.join(SAVE_DIR, `${scenario.name}-${name}-legacy.png`), legacyShot.png);
-                    fs.writeFileSync(path.join(SAVE_DIR, `${scenario.name}-${name}-current.png`), currentShot.png);
-                }
+            }
+            if ((result.count || SAVE_ALL) && SAVE && currentShot) {
+                fs.mkdirSync(SAVE_DIR, { recursive: true });
+                fs.writeFileSync(path.join(SAVE_DIR, `${scenario.name}-${name}-legacy.png`), legacyShot.png);
+                fs.writeFileSync(path.join(SAVE_DIR, `${scenario.name}-${name}-current.png`), currentShot.png);
             }
             const status = result.count === 0 ? 'identical' : result.count < 0 ? 'ERROR' : `${result.count} px`;
             console.log(`${scenario.name.padEnd(9)} ${name.padEnd(18)} ${status.padEnd(10)} ${result.note}`);
         }
     }
+    // The dialogs: one page per dialog tile, clicked open (`?dialog=`), compared over the whole window - the
+    // dialog is centred in the window, so both loads put it at the same place
+    await cdp.send('Page.navigate', { url: `http://localhost:${PORT}/` });
+    await waitFor('the page', 90000, () => evaluate('window.__previewReady === true'));
+    const dialogs = JSON.parse(await evaluate('JSON.stringify(window.__dialogCases || [])')).filter(
+        name => !only.length || only.some(word => name.includes(word)),
+    );
+    const shootWindow = async query => {
+        await cdp.send('Page.navigate', { url: `http://localhost:${PORT}/?${query}` });
+        await waitFor(`the dialog (${query})`, 90000, () => evaluate('window.__previewReady === true'));
+        await evaluate(`(() => {
+            const style = document.createElement('style');
+            style.textContent = '*, *::before, *::after { transition: none !important; animation: none !important; }';
+            document.head.appendChild(style);
+        })()`);
+        await evaluate('new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))');
+        if (process.env.PROBE) {
+            console.log(query, await evaluate(process.env.PROBE));
+        }
+        return shoot({ x: 0, y: 0, width: VIEWPORT.width, height: VIEWPORT.height });
+    };
+    for (const name of dialogs) {
+        const legacyShot = await shootWindow(`dialog=${name}&scope=metro`);
+        const currentShot = await shootWindow(`dialog=${name}&scope=metro-rx`);
+        const result = compare(legacyShot, currentShot);
+        if (result.count) {
+            differing++;
+        }
+        if ((result.count || SAVE_ALL) && SAVE) {
+            fs.mkdirSync(SAVE_DIR, { recursive: true });
+            fs.writeFileSync(path.join(SAVE_DIR, `dialog-${name}-legacy.png`), legacyShot.png);
+            fs.writeFileSync(path.join(SAVE_DIR, `dialog-${name}-current.png`), currentShot.png);
+        }
+        const status = result.count === 0 ? 'identical' : `${result.count} px`;
+        console.log(`${'dialog'.padEnd(9)} ${name.padEnd(18)} ${status.padEnd(10)} ${result.note}`);
+    }
+
+    // The behaviour: every case with `clicks` is loaded alone (`?click=`), clicked at the same places in both
+    // scopes, and what it did is compared - the writes, URL calls and view changes, in their order
+    const clickCases = JSON.parse(await evaluate('JSON.stringify(window.__clickCases || [])')).filter(
+        item => !only.length || only.some(word => item.name.includes(word)),
+    );
+    const clickThrough = async (item, scope) => {
+        await cdp.send('Page.navigate', { url: `http://localhost:${PORT}/?click=${item.name}&scope=${scope}` });
+        await waitFor(`the widget (${item.name}, ${scope})`, 90000, () => evaluate('window.__previewReady === true'));
+        for (const click of item.clicks) {
+            const point = JSON.parse(
+                await evaluate(`(() => {
+                    const click = ${JSON.stringify(click)};
+                    const host = document.querySelector('[data-click-host]');
+                    const el = click.selector ? (click.global ? document : host).querySelector(click.selector) : host;
+                    if (!el) {
+                        return 'null';
+                    }
+                    const r = el.getBoundingClientRect();
+                    // whole pixels, as a mouse delivers them
+                    return JSON.stringify({
+                        x: Math.round(r.left + r.width * (click.x ?? 0.5)),
+                        y: Math.round(r.top + r.height * (click.y ?? 0.5)),
+                    });
+                })()`),
+            );
+            if (!point) {
+                return `no element ${click.selector} to click`;
+            }
+            for (const type of ['mouseMoved', 'mousePressed', 'mouseReleased']) {
+                await cdp.send('Input.dispatchMouseEvent', { type, ...point, button: 'left', clickCount: 1 });
+            }
+            // the widget renders what it wrote before the next click, and a dialog fades in
+            await evaluate('new Promise(resolve => setTimeout(resolve, 300))');
+        }
+        return evaluate('window.__clickLog()');
+    };
+    for (const item of clickCases) {
+        const legacy = await clickThrough(item, 'metro');
+        const current = await clickThrough(item, 'metro-rx');
+        const same = legacy === current;
+        if (!same) {
+            differing++;
+        }
+        console.log(`${'click'.padEnd(9)} ${item.name.padEnd(22)} ${same ? 'same' : 'DIFFERENT'}  ${legacy}`);
+        if (!same) {
+            console.log(`${''.padEnd(43)}${current}`);
+        }
+    }
+
     if (nondeterministic) {
         console.log('\nThe self-test differs: the same page renders differently twice - the other numbers mean nothing.');
     }
@@ -343,17 +335,7 @@ try {
     failed = true;
     console.error(error);
 } finally {
-    chrome.kill();
-    await server.close();
+    await stop();
     console.log(failed ? '\nFAILED' : differing ? `\n${differing} comparison(s) differ` : '\nAll identical.');
-    // Chrome releases its profile only after it exited - on Windows that can take longer than the second waited
-    // here, and a profile left in the temp folder must not turn a passing run into a failing one
-    setTimeout(() => {
-        try {
-            fs.rmSync(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 300 });
-        } catch {
-            console.warn(`Could not remove the Chrome profile ${profile}`);
-        }
-        process.exit(failed || differing ? 1 : 0);
-    }, 1000);
+    process.exit(failed || differing ? 1 : 0);
 }

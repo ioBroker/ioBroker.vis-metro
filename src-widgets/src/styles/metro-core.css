@@ -1,102 +1,19 @@
 /*
- * The look of the metro widgets in vis-2.
+ * The components of the metro widgets in vis-2: tile, slider, switch, checkbox, dialog.
  *
  * Everything lives under `.metro-rx`, the root class of every widget (`Generic.getRootClass()`). vis-2 loads the
  * vis-1 widget set as well, whose metro-bootstrap.css styles the same class names under `.metro` - the two scopes
  * keep them apart. The class names themselves are the ones of vis-1, because vis stores them in the projects.
  *
- * What is in here: the rules the markup of the widgets reaches, resolved from metro-bootstrap.css. That file
- * spreads the look of one element over several rules (`.metro .label` and `.metro .tile .brand .label`, the generic
+ * The rules are the ones the markup of the widgets reaches, resolved from metro-bootstrap.css: that file spreads
+ * the look of one element over several rules (`.metro .label` and `.metro .tile .brand .label`, the generic
  * `.metro button` under the buttons of the dialog); here each element has one rule with the result.
+ * The scope, the fonts and what plain html gets are in metro-content.css, which is loaded before this file, the
+ * colours in metro-palette.css, the icons in metro-iconFont.css.
  *
- * What is not: the Metro UI typography for arbitrary content (`h1`-`h6`, `p`, `a`, lists, forms). User html
- * inside a label or a dialog gets the base font and size of the scope and the browser defaults beyond that.
- * The colours come from metro-palette.css, the icons from metro-iconFont.css.
- *
- * Fonts: the ones of vis-1 - Segoe UI or Open Sans for the text, Cambria or PT Serif Caption for the x of the
- * dialog close button - but Open Sans and PT Serif Caption come with the widget set instead of from
- * themes.googleusercontent.com (see `vis-metro-sans` and `vis-metro-serif` below).
- *
- * Every change here has to pass `npm run preview:diff`: it renders the widgets and the vis-1 markup of the
- * components (preview/fixtures.tsx) with this file and with metro-bootstrap.css and compares them pixel by pixel.
+ * Every change here has to pass `npm run preview:diff`: it renders every widget with this file and its vis-1
+ * template with metro-bootstrap.css and compares them pixel by pixel.
  */
-
-/* ---------------------------------------------------------------------------------------------------- scope */
-
-/*
- * The text font of vis-1: Segoe UI where it is installed (Windows), Open Sans everywhere else. vis-1 loaded that
- * Open Sans from themes.googleusercontent.com; fonts/OpenSans-Regular.woff is the very same file (Open Sans 1.10,
- * (c) 2010-2011 Google, Apache License 2.0 - fonts/OpenSans-LICENSE.txt), so nothing is fetched from outside. Only
- * the regular weight: vis-1 declared no other for this family, bold text is synthesized there as well.
- *
- * The family has a name of its own on purpose. metro-bootstrap.css of the vis-1 set, which vis-2 loads too,
- * defines 'Open Sans' with the address at Google, and of two faces with the same name the browser uses the one
- * that came last.
- */
-@font-face {
-    font-family: 'vis-metro-sans';
-    font-style: normal;
-    font-weight: 400;
-    font-display: block;
-    src:
-        local('Segoe UI'),
-        local('Open Sans'),
-        local('OpenSans'),
-        url('./fonts/OpenSans-Regular.woff') format('woff');
-}
-
-/*
- * The font of the x on the dialog close button, the same way: Cambria where it is installed, else PT Serif Caption
- * 1.000W ((c) 2010 ParaType Ltd., SIL Open Font License 1.1 - fonts/PTSerifCaption-LICENSE.txt), the very file
- * vis-1 loaded from Google. 200 KB for one glyph, but it is only fetched on a device without Cambria and only once
- * a dialog shows; subsetting it would make it a modified version, which the reserved name "PT Serif" forbids to
- * ship under that name.
- */
-@font-face {
-    font-family: 'vis-metro-serif';
-    font-style: normal;
-    font-weight: 400;
-    font-display: block;
-    src:
-        local('Cambria'),
-        local('PT Serif Caption'),
-        local('PTSerif-Caption'),
-        url('./fonts/PTSerifCaption-Regular.woff') format('woff');
-}
-
-.metro-rx {
-    --metro-font: 'vis-metro-sans', Verdana, Arial, Helvetica, sans-serif;
-    --metro-selected: #4390df;
-    --metro-window: #6badf6;
-
-    box-sizing: border-box;
-    font-size: 1.4rem;
-}
-
-/*
- * The font goes on the elements, as in vis-1, not on the scope. In the comparison both come out identical, but
- * they differ where it cannot look: the scope itself keeps the font of the page and with it the height of its own
- * line, and a bold or italic set on the widget in the editor does not reach these elements - both as in vis-1.
- */
-.metro-rx div,
-.metro-rx span,
-.metro-rx p {
-    font-family: var(--metro-font);
-    font-weight: normal;
-    font-style: normal;
-}
-
-/* On every element, not inherited: the browser sets `border-collapse: separate` on <table> itself */
-.metro-rx * {
-    border-collapse: collapse;
-}
-
-.metro-rx img {
-    max-width: 100%;
-    height: auto;
-    border: 0;
-    vertical-align: middle;
-}
 
 /* Used by the heating tile for the indicators that are off */
 .metro-rx .metro-invisible {
@@ -215,7 +132,14 @@
     text-align: center;
 }
 
-/* The tile tilts away from the pointer while it is pressed; the classes are set by the widget */
+/*
+ * The tile tilts away from the pointer while it is pressed; the classes are set by the widget. It tilts in 0.22s
+ * and snaps back at once - the transition only exists while one of the classes is there.
+ */
+.metro-rx [class*='tile-transform-'] {
+    transition: all 0.22s;
+}
+
 .metro-rx .tile-transform-left {
     transform-origin: right 50%;
     transform: perspective(500px) rotateY(-0.138372rad);
@@ -238,10 +162,14 @@
 
 /* --------------------------------------------------------------------------------------------------- slider */
 
-/* The widget positions `.complete` and `.marker` in pixels; sliderColor & co. arrive as inline styles */
+/*
+ * The widget positions `.complete` and `.marker` in pixels; sliderColor & co. arrive as inline styles. The margin
+ * shows only where something follows the slider - in the dialogs of the dimmer, shutter and heating tiles.
+ */
 .metro-rx .slider {
     position: relative;
     height: 12px;
+    margin-bottom: 10px;
     background-color: #c6c6c6;
 }
 
@@ -293,22 +221,13 @@
 
 /* ------------------------------------------------------------------------------------------ switch, checkbox */
 
+/* The margin moves the slider below the switch in the dimmer and shutter dialogs */
 .metro-rx .input-control.checkbox,
 .metro-rx .input-control.switch {
     position: relative;
     display: inline-block;
+    margin-bottom: 7pt;
     cursor: pointer;
-}
-
-/*
- * The <label> around input, check and text. In vis-1 it was a block with a margin - not by a rule of the
- * control, but by the generic `.metro label` of Metro UI, which is why it is easy to lose: without it the control
- * is 10px lower and sits 5px higher.
- */
-.metro-rx .input-control.checkbox label,
-.metro-rx .input-control.switch label {
-    display: block;
-    margin: 5px 0;
 }
 
 /* The real checkbox stays for the state and the keyboard, but it is invisible - `.check` is what is drawn */
@@ -608,4 +527,76 @@
 .metro-rx .window .caption .btn-min:hover::after,
 .metro-rx .window .caption .btn-max:hover::after {
     border-color: #ffffff;
+}
+
+/*
+ * `dialog_flat`: white, a hairline instead of the blue frame, a grey x. These come after the rules above on
+ * purpose - with the same specificity, `top: 4px` here has to win over `top: -8px` of a pressed button.
+ */
+.metro-rx .window.flat {
+    border: 1px solid #e9e9e9;
+    background-color: #ffffff;
+}
+
+.metro-rx .window.flat .caption {
+    width: calc(100% - 10px);
+    height: 20px;
+    padding: 7px 5px;
+    border-top: 0;
+    border-bottom: 1px solid #e9e9e9;
+    background-color: #ffffff;
+}
+
+.metro-rx .window.flat .caption .btn-close,
+.metro-rx .window.flat .caption .btn-min,
+.metro-rx .window.flat .caption .btn-max {
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    background-color: #ffffff;
+    color: #777777;
+}
+
+.metro-rx .window.flat .caption .btn-close:hover,
+.metro-rx .window.flat .caption .btn-min:hover,
+.metro-rx .window.flat .caption .btn-max:hover {
+    background-color: #cde6f7;
+    color: #2a8dd4;
+}
+
+.metro-rx .window.flat .caption .btn-close:hover::after,
+.metro-rx .window.flat .caption .btn-min:hover::after,
+.metro-rx .window.flat .caption .btn-max:hover::after {
+    border-color: #2a8dd4;
+}
+
+.metro-rx .window.flat .caption .btn-close:active,
+.metro-rx .window.flat .caption .btn-min:active,
+.metro-rx .window.flat .caption .btn-max:active {
+    background-color: #92c0e0 !important;
+    color: #ffffff !important;
+}
+
+.metro-rx .window.flat .caption .btn-close::after,
+.metro-rx .window.flat .caption .btn-min::after,
+.metro-rx .window.flat .caption .btn-max::after {
+    width: 10px !important;
+    height: 6px !important;
+    border-color: #777777;
+}
+
+.metro-rx .window.flat .caption .btn-max {
+    right: 29px;
+}
+
+.metro-rx .window.flat .caption .btn-min {
+    right: 54px;
+}
+
+.metro-rx .window.flat .caption .btn-close::after {
+    margin-top: 2px;
+}
+
+.metro-rx .window.flat .content {
+    margin-top: 35px;
 }
