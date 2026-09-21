@@ -102,6 +102,17 @@
     "noConfig": true,
     "adminUI": {
       "config": "none"
+    },
+    "visWidgets": {
+      "visMetroWidgets": {
+        "i18n": "component",
+        "name": "visMetroWidgets",
+        "url": "vis-2-widgets-metro/customWidgets.js",
+        "bundlerType": "module",
+        "components": [
+          "MetroTileBool"
+        ]
+      }
     }
   },
   "native": {

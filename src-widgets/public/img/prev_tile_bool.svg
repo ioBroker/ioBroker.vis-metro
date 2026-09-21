@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Metro tile">
+    <defs>
+        <pattern id="ribbed" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+            <rect width="40" height="40" fill="#647687"/>
+            <rect width="20" height="40" fill="#ffffff" fill-opacity="0.15"/>
+        </pattern>
+    </defs>
+    <rect width="120" height="120" fill="#6a00ff"/>
+    <g fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="square">
+        <path d="M40 60 L54 74 L81 44"/>
+    </g>
+    <rect y="91" width="120" height="29" fill="url(#ribbed)"/>
+    <text x="8" y="111" font-family="Segoe UI, Verdana, sans-serif" font-size="13" fill="#ffffff">Boolean</text>
+    <rect x="92" y="95" width="21" height="21" fill="#1ba1e2"/>
+    <rect x="97" y="101" width="11" height="9" fill="#ffffff"/>
+</svg>

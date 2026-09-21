@@ -1,3 +1,10 @@
 /node_modules
 /.idea
 /package-lock.json
+/src-widgets/node_modules
+/src-widgets/build
+/src-widgets/.__mf__temp
+/widgets/vis-2-widgets-metro
+/src-widgets/preview/.vite
+/src-widgets/preview/dist
+/src-widgets/preview/.diff

@@ -16,6 +16,9 @@ Build with http://metroui.org.ua/.
     ### __WORK IN PROGRESS__
 -->
 ## Changelog
+### __WORK IN PROGRESS__
+* (bluefox) The fonts Open Sans and PT Serif Caption are shipped with the adapter and no longer loaded from Google
+
 ### 1.2.0 (2022-02-12)
 * (bluefox) Updated build process
 
@@ -86,3 +89,13 @@ Build with http://metroui.org.ua/.
 ## License
  Copyright (c) 2013-2022 hobbyquaker https://github.com/hobbyquaker, bluefox https://github.com/GermanBluefox
  MIT
+
+### Third-party fonts
+Both widget sets ship these fonts unmodified, so that nothing is loaded from Google. They are used on devices
+without Segoe UI and Cambria; the license texts ship next to them in `widgets/metro/fonts/` and
+`widgets/vis-2-widgets-metro/fonts/`.
+
+- Open Sans 1.10 - Regular, and in the vis-1 set also Light and Bold. Digitized data copyright (c) 2010-2011 Google
+  Corporation, licensed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+- PT Serif Caption 1.000W - Copyright (c) 2010 ParaType Ltd., with Reserved Font Names "PT Sans", "PT Serif" and
+  "ParaType", licensed under the [SIL Open Font License, Version 1.1](https://openfontlicense.org).
