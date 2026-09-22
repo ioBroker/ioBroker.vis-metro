@@ -1,0 +1,602 @@
+/*
+ * The components of the metro widgets in vis-2: tile, slider, switch, checkbox, dialog.
+ *
+ * Everything lives under `.metro-rx`, the root class of every widget (`Generic.getRootClass()`). vis-2 loads the
+ * vis-1 widget set as well, whose metro-bootstrap.css styles the same class names under `.metro` - the two scopes
+ * keep them apart. The class names themselves are the ones of vis-1, because vis stores them in the projects.
+ *
+ * The rules are the ones the markup of the widgets reaches, resolved from metro-bootstrap.css: that file spreads
+ * the look of one element over several rules (`.metro .label` and `.metro .tile .brand .label`, the generic
+ * `.metro button` under the buttons of the dialog); here each element has one rule with the result.
+ * The scope, the fonts and what plain html gets are in metro-content.css, which is loaded before this file, the
+ * colours in metro-palette.css, the icons in metro-iconFont.css.
+ *
+ * Every change here has to pass `npm run preview:diff`: it renders every widget with this file and its vis-1
+ * template with metro-bootstrap.css and compares them pixel by pixel.
+ */
+
+/* Used by the heating tile for the indicators that are off */
+.metro-rx .metro-invisible {
+    display: none;
+}
+
+/* ----------------------------------------------------------------------------------------------------- tile */
+
+.metro-rx .tile {
+    position: relative;
+    overflow: hidden;
+    background-color: #eeeeee;
+    box-shadow: inset 0 0 1px #ffffcc;
+}
+
+/* The font is set on every element of a tile, not inherited - it wins over the font of user html in a tile */
+.metro-rx .tile,
+.metro-rx .tile * {
+    font-family: var(--metro-font);
+}
+
+.metro-rx .tile.hover:hover {
+    outline: 3px solid #999999;
+    cursor: pointer;
+}
+
+/* The border lies outside of the tile: the negative margin moves the tile back by its width */
+.metro-rx .tile.selected {
+    margin: -4px 0 0 -4px;
+    border: 4px solid var(--metro-selected);
+}
+
+/* The blue corner ... */
+.metro-rx .tile.selected::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 101;
+    border-top: 28px solid var(--metro-selected);
+    border-left: 28px solid transparent;
+}
+
+/* ... and the check mark on it */
+.metro-rx .tile.selected::before {
+    content: '\e003';
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 102;
+    color: #ffffff;
+    font-family: metroSysIcons;
+    font-size: 9pt;
+    font-weight: normal;
+}
+
+/* Only the first content of a tile is shown - a relic of the "live tiles" of Metro UI, kept as it was */
+.metro-rx .tile .tile-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.metro-rx .tile .tile-content:first-child {
+    display: block;
+}
+
+/* The glyph or image in the middle of an icon tile, 56x56 */
+.metro-rx .tile .tile-content.icon [class*='icon-'],
+.metro-rx .tile .tile-content.icon img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 56px;
+    height: 56px;
+    margin: -28px 0 0 -28px;
+    color: #ffffff;
+    font-size: 48px;
+    line-height: 56px;
+    text-align: center;
+}
+
+/* The strip at the bottom with the label and the badge */
+.metro-rx .tile .brand {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    min-height: 29px;
+}
+
+.metro-rx .tile .brand .label {
+    display: block;
+    margin: 5px 20px 2px 5px;
+    padding: 3px 5px;
+    background: transparent;
+    color: #ffffff;
+    font-size: 10pt;
+    font-weight: normal;
+    line-height: 90%;
+}
+
+.metro-rx .tile .brand .badge {
+    position: absolute;
+    right: 10px;
+    bottom: 0;
+    width: 19px;
+    height: 19px;
+    padding: 5px;
+    color: #ffffff;
+    font-size: 10pt;
+    text-align: center;
+}
+
+/*
+ * The tile tilts away from the pointer while it is pressed; the classes are set by the widget. It tilts in 0.22s
+ * and snaps back at once - the transition only exists while one of the classes is there.
+ */
+.metro-rx [class*='tile-transform-'] {
+    transition: all 0.22s;
+}
+
+.metro-rx .tile-transform-left {
+    transform-origin: right 50%;
+    transform: perspective(500px) rotateY(-0.138372rad);
+}
+
+.metro-rx .tile-transform-right {
+    transform-origin: left 50%;
+    transform: perspective(500px) rotateY(0.138372rad);
+}
+
+.metro-rx .tile-transform-top {
+    transform-origin: 50% bottom;
+    transform: perspective(500px) rotateX(0.138372rad);
+}
+
+.metro-rx .tile-transform-bottom {
+    transform-origin: 50% top;
+    transform: perspective(500px) rotateX(-0.138372rad);
+}
+
+/* --------------------------------------------------------------------------------------------------- slider */
+
+/*
+ * The widget positions `.complete` and `.marker` in pixels; sliderColor & co. arrive as inline styles. The margin
+ * shows only where something follows the slider - in the dialogs of the dimmer, shutter and heating tiles.
+ */
+.metro-rx .slider {
+    position: relative;
+    height: 12px;
+    margin-bottom: 10px;
+    background-color: #c6c6c6;
+}
+
+.metro-rx .slider .complete {
+    height: 100%;
+    background-color: #00828b;
+    transition: background 0.3s ease;
+}
+
+.metro-rx .slider:hover .complete,
+.metro-rx .slider:active .complete {
+    background-color: #219297;
+}
+
+.metro-rx .slider .marker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 12px;
+    height: 12px;
+    background-color: #000000;
+    cursor: pointer;
+}
+
+.metro-rx .slider .marker:focus,
+.metro-rx .slider .marker:active {
+    outline: 2px solid #e51400;
+}
+
+.metro-rx .slider.vertical {
+    width: 12px;
+    height: 100%;
+}
+
+/* Vertical: the filled part grows from the bottom */
+.metro-rx .slider.vertical .complete {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    width: 100% !important;
+    height: auto;
+}
+
+.metro-rx .slider.vertical .marker {
+    left: 0 !important;
+}
+
+/* ------------------------------------------------------------------------------------------ switch, checkbox */
+
+/* The margin moves the slider below the switch in the dimmer and shutter dialogs */
+.metro-rx .input-control.checkbox,
+.metro-rx .input-control.switch {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 7pt;
+    cursor: pointer;
+}
+
+/* The real checkbox stays for the state and the keyboard, but it is invisible - `.check` is what is drawn */
+.metro-rx .input-control.checkbox input[type='checkbox'],
+.metro-rx .input-control.switch input[type='checkbox'] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    opacity: 0;
+}
+
+.metro-rx .input-control.checkbox input[type='checkbox']:focus ~ .check,
+.metro-rx .input-control.switch input[type='checkbox']:focus ~ .check {
+    outline: 1px dotted #999999 !important;
+}
+
+.metro-rx .input-control.checkbox .caption,
+.metro-rx .input-control.switch .caption {
+    margin: 0 5px;
+}
+
+/* checkbox */
+
+.metro-rx .input-control.checkbox .check {
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    border: 2px solid #d9d9d9;
+    background-color: #ffffff;
+    vertical-align: middle;
+}
+
+.metro-rx .input-control.checkbox:hover .check {
+    border-color: #919191;
+}
+
+.metro-rx .input-control.checkbox .check:active {
+    border-color: #1e1e1e;
+}
+
+.metro-rx .input-control.checkbox .check::after {
+    position: absolute;
+    font-family: metroSysIcons;
+    font-size: 9pt;
+    line-height: 9pt;
+}
+
+.metro-rx .input-control.checkbox input[type='checkbox']:checked ~ .check::after {
+    content: '\e003';
+    top: 0;
+    margin: 2px;
+    color: #1d1d1d;
+}
+
+.metro-rx .input-control.checkbox input[type='checkbox']:disabled ~ .check {
+    border-color: #d9d9d9;
+    background-color: #e6e6e6;
+}
+
+.metro-rx .input-control.checkbox input[type='checkbox']:disabled ~ .check::after {
+    color: #8a8a8a;
+}
+
+/* switch */
+
+.metro-rx .input-control.switch .check {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    width: 45px;
+    height: 16px;
+    border: 1px solid #ffffff;
+    outline: 2px solid #a6a6a6;
+    background: #a6a6a6;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+/* The knob */
+.metro-rx .input-control.switch .check::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    z-index: 2;
+    display: block;
+    width: 9px;
+    height: 16px;
+    border: 1px solid #333333;
+    outline: 2px solid #333333;
+    background: #333333;
+    cursor: pointer;
+}
+
+.metro-rx .input-control.switch input[type='checkbox']:checked ~ .check {
+    background: #008287;
+}
+
+.metro-rx .input-control.switch input[type='checkbox']:checked ~ .check::after {
+    right: -1px;
+    left: auto;
+}
+
+.metro-rx .input-control.switch input[type='checkbox']:disabled ~ .check {
+    border-color: #ffffff;
+    background-color: #e6e6e6;
+}
+
+.metro-rx .input-control.switch input[type='checkbox']:disabled ~ .check::after {
+    border-color: #8a8a8a;
+    outline-color: #8a8a8a;
+    background-color: #8a8a8a;
+}
+
+/* --------------------------------------------------------------------------------------------------- dialog */
+
+/* The overlay carries the scope class itself - the dialog is not inside a widget */
+.metro-rx.window-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1049;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.metro-rx .window {
+    position: relative;
+    min-width: 200px;
+    min-height: 200px;
+    border: 8px solid var(--metro-window);
+    border-top: 0;
+    background-color: #ffffff;
+}
+
+.metro-rx .window.shadow {
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.3),
+        0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.metro-rx .window .caption {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    height: 32px;
+    border-top: 8px solid var(--metro-window);
+    background-color: var(--metro-window);
+    cursor: default;
+}
+
+.metro-rx .window .caption .icon {
+    position: relative;
+    float: left;
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.metro-rx .window .caption .title {
+    position: relative;
+    float: left;
+    margin: -2px 0 0 4px;
+    font-size: 14px;
+}
+
+.metro-rx .window .content {
+    position: relative;
+    box-sizing: content-box;
+    width: 100%;
+    height: calc(100% - 40px);
+    margin-top: 40px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/*
+ * The buttons of the caption. They are <button> elements, and in vis-1 the generic `.metro button` rule was under
+ * them - its transparent border, line height, focus border and pressed border are merged in here.
+ */
+.metro-rx .window .caption .btn-close,
+.metro-rx .window .caption .btn-min,
+.metro-rx .window .caption .btn-max {
+    position: absolute;
+    top: -8px;
+    right: 0;
+    z-index: 3;
+    width: 48px;
+    height: 24px;
+    min-height: 24px;
+    padding: 0 0 10px;
+    border: 1px solid transparent;
+    border-radius: 0;
+    outline: none;
+    background-color: #c75050;
+    color: #ffffff;
+    font-family: 'vis-metro-serif', Verdana, Arial, Helvetica, sans-serif;
+    font-size: 16pt;
+    font-weight: normal;
+    line-height: 16px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.metro-rx .window .caption .btn-close:hover,
+.metro-rx .window .caption .btn-min:hover,
+.metro-rx .window .caption .btn-max:hover {
+    background-color: #e04343;
+}
+
+.metro-rx .window .caption .btn-close:focus,
+.metro-rx .window .caption .btn-min:focus,
+.metro-rx .window .caption .btn-max:focus {
+    border: 1px dotted #353535;
+}
+
+.metro-rx .window .caption .btn-close:active,
+.metro-rx .window .caption .btn-min:active,
+.metro-rx .window .caption .btn-max:active {
+    top: -8px;
+    right: 0;
+    left: auto;
+    border-color: transparent;
+    background-color: #b01919 !important;
+}
+
+/* The x of the close button */
+.metro-rx .window .caption .btn-close::after,
+.metro-rx .window .caption .btn-min::after,
+.metro-rx .window .caption .btn-max::after {
+    content: '\D7';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -0.3em;
+}
+
+/* Minimize and maximize: narrower, transparent, drawn as a line and a box */
+.metro-rx .window .caption .btn-min,
+.metro-rx .window .caption .btn-max {
+    right: 75px;
+    width: 24px;
+    padding-bottom: 10px;
+    background-color: transparent;
+    color: #000000;
+    font-weight: bold;
+}
+
+.metro-rx .window .caption .btn-max {
+    right: 50px;
+}
+
+.metro-rx .window .caption .btn-min:hover,
+.metro-rx .window .caption .btn-max:hover {
+    background-color: #1b6eae;
+    color: #ffffff;
+}
+
+.metro-rx .window .caption .btn-min:active,
+.metro-rx .window .caption .btn-max:active {
+    top: -8px;
+    right: 75px;
+    left: auto;
+    background-color: #1e7cc4 !important;
+    color: #ffffff;
+}
+
+.metro-rx .window .caption .btn-max:active {
+    right: 50px;
+}
+
+.metro-rx .window .caption .btn-min::after,
+.metro-rx .window .caption .btn-max::after {
+    content: ' ';
+    position: absolute;
+    top: auto;
+    bottom: 6px;
+    left: 50%;
+    display: block;
+    width: 10px;
+    height: 10px;
+    margin-left: -6px;
+    border: 0 solid #000000;
+    border-bottom-width: 2px;
+}
+
+.metro-rx .window .caption .btn-max::after {
+    height: 6px;
+    border: 1px solid #000000;
+    border-top-width: 2px;
+}
+
+.metro-rx .window .caption .btn-min:hover::after,
+.metro-rx .window .caption .btn-max:hover::after {
+    border-color: #ffffff;
+}
+
+/*
+ * `dialog_flat`: white, a hairline instead of the blue frame, a grey x. These come after the rules above on
+ * purpose - with the same specificity, `top: 4px` here has to win over `top: -8px` of a pressed button.
+ */
+.metro-rx .window.flat {
+    border: 1px solid #e9e9e9;
+    background-color: #ffffff;
+}
+
+.metro-rx .window.flat .caption {
+    width: calc(100% - 10px);
+    height: 20px;
+    padding: 7px 5px;
+    border-top: 0;
+    border-bottom: 1px solid #e9e9e9;
+    background-color: #ffffff;
+}
+
+.metro-rx .window.flat .caption .btn-close,
+.metro-rx .window.flat .caption .btn-min,
+.metro-rx .window.flat .caption .btn-max {
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    background-color: #ffffff;
+    color: #777777;
+}
+
+.metro-rx .window.flat .caption .btn-close:hover,
+.metro-rx .window.flat .caption .btn-min:hover,
+.metro-rx .window.flat .caption .btn-max:hover {
+    background-color: #cde6f7;
+    color: #2a8dd4;
+}
+
+.metro-rx .window.flat .caption .btn-close:hover::after,
+.metro-rx .window.flat .caption .btn-min:hover::after,
+.metro-rx .window.flat .caption .btn-max:hover::after {
+    border-color: #2a8dd4;
+}
+
+.metro-rx .window.flat .caption .btn-close:active,
+.metro-rx .window.flat .caption .btn-min:active,
+.metro-rx .window.flat .caption .btn-max:active {
+    background-color: #92c0e0 !important;
+    color: #ffffff !important;
+}
+
+.metro-rx .window.flat .caption .btn-close::after,
+.metro-rx .window.flat .caption .btn-min::after,
+.metro-rx .window.flat .caption .btn-max::after {
+    width: 10px !important;
+    height: 6px !important;
+    border-color: #777777;
+}
+
+.metro-rx .window.flat .caption .btn-max {
+    right: 29px;
+}
+
+.metro-rx .window.flat .caption .btn-min {
+    right: 54px;
+}
+
+.metro-rx .window.flat .caption .btn-close::after {
+    margin-top: 2px;
+}
+
+.metro-rx .window.flat .content {
+    margin-top: 35px;
+}

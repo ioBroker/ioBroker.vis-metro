@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Metro widgets preview</title>
+        <!--
+            The vis-1 stylesheets, exactly as widgets/metro.html links them. Everything in them is scoped under
+            `.metro`, the vis-2 widgets live under `.metro-rx` - so both can be on one page, and the comparison
+            columns render the same DOM once with each.
+        -->
+        <link rel="stylesheet" href="/widgets/metro/css/metro-bootstrap.css" />
+        <link rel="stylesheet" href="/widgets/metro/css/iconFont.min.css" />
+        <style>
+            body {
+                margin: 0;
+            }
+            /*
+             * What vis-2 gives every widget, EJS or React: the widget box (class vis-widget) clips its content,
+             * the body of an EJS template (class vis-widget-body) fills that box, and the page font is Arial 16px.
+             * Without this the comparison would pass here and differ in vis-2 - e.g. the vertical slider of
+             * vis-1 has no height of its own.
+             */
+            [data-side] {
+                font: 16px Arial;
+            }
+            [data-side] .vis-widget {
+                overflow: hidden;
+            }
+            [data-side] .vis-widget-body {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="module" src="./preview.tsx"></script>
+    </body>
+</html>

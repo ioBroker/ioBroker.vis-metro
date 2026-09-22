@@ -1,0 +1,483 @@
+/*
+ * The scope of the metro widgets and what plain html gets inside it.
+ *
+ * metro-bootstrap.css of vis-1 gave every element inside `.metro` the Metro UI look: headings, paragraphs, links,
+ * lists, buttons, forms. That reaches html the user writes - labels, the html dialog, the content of a tile - and
+ * a view shown in a dialog. It is taken over here as it was (rules merged, only the declaration that won kept,
+ * prefixes of browsers that cannot run vis-2 dropped), so such html looks as before. The components are in
+ * metro-core.css, which comes after this file, as in the original.
+ *
+ * Fonts: those of vis-1 - Segoe UI (Light, Bold) where it is installed, Open Sans 1.10 (Light, Bold) everywhere
+ * else, Cambria or PT Serif Caption for the x of the dialog. vis-1 loaded Open Sans and PT Serif Caption from
+ * themes.googleusercontent.com; fonts/ holds those very files (Open Sans: (c) 2010-2011 Google, Apache License 2.0;
+ * PT Serif Caption: (c) 2010 ParaType Ltd., SIL Open Font License 1.1 - the notices ship as fonts/*-LICENSE.txt).
+ * The families have names of their own on purpose: metro-bootstrap.css, which vis-2 loads as well, defines
+ * 'Open Sans' with the address at Google, and of two faces with the same name the browser takes the last one.
+ * Each family declares only the weight vis-1 declared, so the same text is synthesized bold as there.
+ */
+
+@font-face {
+    font-family: 'vis-metro-sans';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src:
+        local('Segoe UI'),
+        local('Open Sans'),
+        local('OpenSans'),
+        url('./fonts/OpenSans-Regular.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'vis-metro-sans-light';
+    font-style: normal;
+    font-weight: 300;
+    font-display: block;
+    src:
+        local('Segoe UI Light'),
+        local('Open Sans Light'),
+        local('OpenSans-Light'),
+        url('./fonts/OpenSans-Light.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'vis-metro-sans-bold';
+    font-style: normal;
+    font-weight: 700;
+    font-display: block;
+    src:
+        local('Segoe UI Bold'),
+        local('Open Sans Bold'),
+        local('OpenSans-Bold'),
+        url('./fonts/OpenSans-Bold.woff') format('woff');
+}
+
+/*
+ * The x of the dialog close button. 200 KB for one glyph, but it is fetched only on a device without Cambria and
+ * only once a dialog shows; a subset would be a modified version, which the reserved name "PT Serif" forbids to
+ * ship under that name.
+ */
+@font-face {
+    font-family: 'vis-metro-serif';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src:
+        local('Cambria'),
+        local('PT Serif Caption'),
+        local('PTSerif-Caption'),
+        url('./fonts/PTSerifCaption-Regular.woff') format('woff');
+}
+
+/* ---------------------------------------------------------------------------------------------------- scope */
+
+.metro-rx {
+    --metro-font: 'vis-metro-sans', Verdana, Arial, Helvetica, sans-serif;
+    --metro-font-light: 'vis-metro-sans-light', Verdana, Arial, Helvetica, sans-serif;
+    --metro-font-bold: 'vis-metro-sans-bold', Verdana, Arial, Helvetica, sans-serif;
+    --metro-selected: #4390df;
+    --metro-window: #6badf6;
+
+    box-sizing: border-box;
+    font-size: 1.4rem;
+}
+
+/*
+ * The font goes on the elements, as in vis-1, not on the scope. The scope itself keeps the font of the page and
+ * with it the height of its own line, and a bold or italic set on the widget in the editor does not reach these
+ * elements - both as in vis-1.
+ */
+.metro-rx div,
+.metro-rx span,
+.metro-rx p {
+    font-family: var(--metro-font);
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* On every element, not inherited: the browser sets `border-collapse: separate` on <table> itself */
+.metro-rx * {
+    border-collapse: collapse;
+}
+
+/* ------------------------------------------------------------------------------------------------- elements */
+
+.metro-rx audio,
+.metro-rx canvas,
+.metro-rx video {
+    display: inline-block;
+}
+
+.metro-rx sub,
+.metro-rx sup {
+    position: relative;
+    font-size: 75%;
+    line-height: 0;
+    vertical-align: baseline;
+}
+
+.metro-rx sup {
+    top: -0.5em;
+}
+
+.metro-rx sub {
+    bottom: -0.25em;
+}
+
+.metro-rx img {
+    max-width: 100%;
+    height: auto;
+    border: 0;
+    vertical-align: middle;
+}
+
+.metro-rx code {
+    display: inline-block;
+    margin: 0;
+    padding: 3px 5px;
+    border: 1px solid #d4d4d4;
+    background-color: #eeeeee;
+    color: #e51400;
+    font-family: 'Courier New', monospace;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 90%;
+    line-height: 90%;
+    letter-spacing: 0.02em;
+}
+
+.metro-rx hr {
+    height: 1px;
+    margin: 20px 0;
+    border: 0;
+    background-color: #eeeeee;
+    color: #eeeeee;
+}
+
+.metro-rx [draggable] {
+    cursor: default;
+}
+
+/* ----------------------------------------------------------------------------------------------- typography */
+
+.metro-rx h1,
+.metro-rx h2,
+.metro-rx h3,
+.metro-rx h4,
+.metro-rx h5,
+.metro-rx h6 {
+    margin: 10px 0;
+    padding: 0;
+}
+
+.metro-rx h1 {
+    color: #000000;
+    font-family: var(--metro-font-light);
+    font-weight: 300;
+    font-size: 4.8rem;
+    line-height: 4.8rem;
+    letter-spacing: 0;
+}
+
+.metro-rx h2 {
+    color: #000000;
+    font-family: var(--metro-font-light);
+    font-weight: 300;
+    font-size: 2.5rem;
+    line-height: 2.5rem;
+    letter-spacing: 0.01em;
+}
+
+.metro-rx h3 {
+    color: rgba(0, 0, 0, 0.6);
+    font-family: var(--metro-font-light);
+    font-weight: bold;
+    font-size: 2.2rem;
+    line-height: 2.2rem;
+    letter-spacing: 0.01em;
+}
+
+.metro-rx h4 {
+    color: #000000;
+    font-family: var(--metro-font-bold);
+    font-weight: bold;
+    font-size: 1.6rem;
+    line-height: 1.6rem;
+    letter-spacing: 0.02em;
+}
+
+.metro-rx h5 {
+    color: rgba(0, 0, 0, 0.6);
+    font-family: var(--metro-font-bold);
+    font-weight: bold;
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    letter-spacing: 0.02em;
+}
+
+.metro-rx h6 {
+    color: #000000;
+    font-family: var(--metro-font);
+    font-weight: bold;
+    font-style: normal;
+    font-size: 9pt;
+    line-height: 15pt;
+    letter-spacing: 0.02em;
+}
+
+.metro-rx h1 small {
+    font-size: 19.25pt;
+}
+
+.metro-rx h2 small {
+    font-size: 13.75pt;
+}
+
+.metro-rx h3 small,
+.metro-rx h4 small {
+    font-size: 11pt;
+}
+
+.metro-rx p {
+    margin: 0 0 7pt;
+    color: #000000;
+    font-size: 11pt;
+    line-height: 15pt;
+    letter-spacing: 0.02em;
+}
+
+.metro-rx p [data-hint] {
+    border-bottom: 1px dotted #373737;
+    white-space: nowrap;
+}
+
+.metro-rx strong {
+    font-family: var(--metro-font-bold);
+    font-weight: bold;
+}
+
+.metro-rx abbr {
+    border-bottom: 1px dotted #999999;
+    text-decoration: none;
+    cursor: help;
+}
+
+.metro-rx address {
+    margin-bottom: 7pt;
+    font-family: var(--metro-font);
+    font-weight: normal;
+    font-style: normal;
+}
+
+.metro-rx blockquote {
+    margin: 0;
+    padding: 0 0 0 10px;
+    border-left: 4px solid #999999;
+}
+
+.metro-rx blockquote small {
+    color: #999999;
+}
+
+.metro-rx blockquote small::before {
+    content: '\2014 \00A0';
+}
+
+.metro-rx ul,
+.metro-rx ol {
+    margin-left: 5px;
+    padding-left: 15px;
+    color: #000000;
+    font-family: var(--metro-font);
+    font-weight: normal;
+    font-style: normal;
+    font-size: 11pt;
+    line-height: 15pt;
+    letter-spacing: 0.02em;
+}
+
+.metro-rx ul li,
+.metro-rx ol li {
+    line-height: 20px;
+}
+
+.metro-rx ul li ul,
+.metro-rx ol li ul,
+.metro-rx ul li ol,
+.metro-rx ol li ol {
+    padding-left: 25px;
+}
+
+.metro-rx dl dt,
+.metro-rx dl dd {
+    line-height: 20px;
+}
+
+.metro-rx dl dt {
+    font-family: var(--metro-font-bold);
+}
+
+.metro-rx dl dd {
+    margin-left: 15px;
+}
+
+.metro-rx table {
+    max-width: 100%;
+    border-spacing: 0;
+}
+
+.metro-rx a {
+    color: #2e92cf;
+    text-decoration: none;
+}
+
+.metro-rx a:hover {
+    outline: 0;
+    color: rgba(45, 173, 237, 0.8);
+}
+
+.metro-rx a:focus {
+    color: rgba(45, 173, 237, 0.6);
+}
+
+.metro-rx a:active {
+    outline: 0;
+    color: rgba(45, 173, 237, 0.6);
+}
+
+/* ---------------------------------------------------------------------------------------------------- forms */
+
+.metro-rx form {
+    margin: 0 0 14pt;
+}
+
+.metro-rx fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.metro-rx legend {
+    display: block;
+    width: 100%;
+    margin-bottom: 14pt;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid #e5e5e5;
+    color: #333333;
+    font-size: 16.5pt;
+    line-height: 28pt;
+}
+
+.metro-rx legend small {
+    color: #999999;
+    font-size: 10.5pt;
+}
+
+/* The label around the checkbox of the switch and checkbox widgets gets its block and margin from here, too */
+.metro-rx label {
+    display: block;
+    margin: 5px 0;
+}
+
+.metro-rx button,
+.metro-rx input,
+.metro-rx select,
+.metro-rx textarea {
+    margin: 0;
+    font-size: 100%;
+    vertical-align: middle;
+}
+
+.metro-rx button,
+.metro-rx input {
+    line-height: normal;
+}
+
+.metro-rx button::-moz-focus-inner,
+.metro-rx input::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+.metro-rx label,
+.metro-rx select,
+.metro-rx input[type='radio'],
+.metro-rx input[type='checkbox'] {
+    cursor: pointer;
+}
+
+.metro-rx input[type='search'] {
+    box-sizing: content-box;
+}
+
+.metro-rx textarea {
+    overflow: auto;
+    vertical-align: top;
+}
+
+.metro-rx input[type='number']::-webkit-inner-spin-button,
+.metro-rx input[type='number']::-webkit-outer-spin-button {
+    margin: 0;
+}
+
+.metro-rx button,
+.metro-rx input[type='button'],
+.metro-rx input[type='submit'],
+.metro-rx input[type='reset'] {
+    display: inline-block;
+    margin: auto;
+    padding: 4px 12px;
+    border: 1px solid transparent;
+    border-radius: 0;
+    outline: none;
+    background-color: #d9d9d9;
+    color: #222222;
+    font-family: var(--metro-font-light);
+    font-size: 14px;
+    line-height: 16px;
+    text-align: center;
+    vertical-align: middle !important;
+    cursor: pointer;
+}
+
+.metro-rx button:focus,
+.metro-rx input[type='button']:focus,
+.metro-rx input[type='submit']:focus,
+.metro-rx input[type='reset']:focus {
+    outline: 0;
+    border: 1px dotted #353535;
+}
+
+.metro-rx button:disabled,
+.metro-rx input[type='button']:disabled,
+.metro-rx input[type='submit']:disabled,
+.metro-rx input[type='reset']:disabled {
+    background-color: #eaeaea !important;
+    color: #bebebe !important;
+    cursor: not-allowed !important;
+}
+
+.metro-rx button *,
+.metro-rx input[type='button'] *,
+.metro-rx input[type='submit'] *,
+.metro-rx input[type='reset'] * {
+    color: inherit;
+}
+
+/* Not redundant: it outweighs `a:hover` above, so a link inside a button keeps its colour under the pointer */
+.metro-rx button *:hover,
+.metro-rx input[type='button'] *:hover,
+.metro-rx input[type='submit'] *:hover,
+.metro-rx input[type='reset'] *:hover {
+    color: inherit;
+}
+
+.metro-rx button:active,
+.metro-rx input[type='button']:active,
+.metro-rx input[type='submit']:active,
+.metro-rx input[type='reset']:active {
+    border-color: transparent;
+    background-color: #1d1d1d !important;
+    color: #ffffff !important;
+}
