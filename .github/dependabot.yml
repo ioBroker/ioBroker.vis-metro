@@ -4,26 +4,27 @@ updates:
   - package-ecosystem: github-actions
     directory: '/'
     schedule:
-      interval: monthly
-      time: '04:00'
+      interval: 'cron'
       timezone: Europe/Berlin
+      cronjob: '16 1 7 * *'
+    open-pull-requests-limit: 15
 
   - package-ecosystem: npm
     directory: '/'
     schedule:
-      interval: monthly
-      time: '04:00'
+      interval: 'cron'
       timezone: Europe/Berlin
-    open-pull-requests-limit: 5
+      cronjob: '16 1 7 * *'
+    open-pull-requests-limit: 15
     versioning-strategy: increase
 
   # the vis-2 widget set
   - package-ecosystem: npm
     directory: '/src-widgets'
     schedule:
-      interval: monthly
-      time: '04:00'
+      interval: 'cron'
       timezone: Europe/Berlin
+      cronjob: '16 1 7 * *'
     open-pull-requests-limit: 20
     versioning-strategy: increase
     ignore:
